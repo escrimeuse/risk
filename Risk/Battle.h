@@ -8,62 +8,67 @@ class Battle {
 
 private:
 	
-	// data members
-	Player* attacker;
-	Player* defender;
-	Country* attackingCountry;
-	Country* defendingCountry;
-	int attackerNumOfArmies;
-	int defenderNumOfArmies;
-	int attackerNumOfDice;
-	int defenderNumOfDice;
-	int* attackerDice;	// points to a dynamic array of dice
-	int* defenderDice;	// points to a dynamic array of dice
-	bool defendingCountryCaptured;
-	bool attackingCountryStop;
+	// DATA MEMBERS
+	struct BattlePlayer {
+		Player* player;		// a pointer to the player
+		Country* country;	// a pointer to the country used to attack
+		int numOfDice;		// the number of dice rolled by the player
+		int* dice;			// an array of dice rolls
+	} attacker, defender;
 
+	// MUTATORS (inline)
+	// NOTE: These mutators were coded as inline as they contain simple, one-line code
+	void setAttacker(Player* theAttacker) {
+		attacker.player = theAttacker;
+	};
+	void setDefender(Player* theDefender) {
+		defender.player = theDefender;
+	};
 
-	// mutators
-	void setAttacker(Player& theAttacker);
-	void setDefender(Player& theDefender);
-	void setAttackingCountry(Country& theCountry);
-	void setDefendingCountry(Country& theCountry);
-	void setAttackerNumArmies(int num);
-	void setDefenderNumArmies(int num);
-	void setAttackerNumDice(int num);
-	void setDefenderNumDice(int num);
-	void setAttackerDice(int* dice);
-	void setDefenderDice(int* dice);
+	// ACCESSORS (inline)
+	// NOTE: These accessors were coded as inline as they contain simple, one-line code
+	Player* getAttacker() const {
+		return attacker.player;
+	};
+	Player* getDefender() const {
+		return defender.player;
+	};
 
-	// accessors
-	Player* getAttacker();
-	Player* getDefender();
-	Country* getAttackingCountry();
-	Country* getDefendingCountry();
-	int getAttackerNumArmies();
-	int getDefenderNumArmies();
-	int getAttackerNumDice();
-	int getDefenderNumDice();
-	int* getAttackerDice();
-	int* getDefenderDice();
+	// SERVICE METHODS
 
-	// service methods
-	void selectAttackingCountry();
-	void selectDefendingCountry();
-	void determineAndSetAttackerNumDice();
-	void determineAndSetDefenderNumDice();
-	int* rollDice(int numberOfDice);
-	void sortDice(int* dice, int numOfDice);
+	// this function allows the attacking player to select the country they wish to attack with, and sets the attacking country accordingly
+	int selectAttackingCountry();
+
+	// this function allows the attacking player to select the country they wish to attack, and sets the defending country and player accordingly
+	// it returns false if there are no applicable defending countries adjacent to the attacking country
+	int selectDefendingCountry();
+
+	// this function sets the number of dice for the player
+	void decideNumDiceToRoll(bool allIn);
+
+	// this function rolls a number of dice, and returns an array (of size numberOfDice) with the dice roll results
+	void rollDice();
+
+	// this function sorts an array of dice rolls, ordering them from highest roll to lowest roll
+	void sortDice();
+
+	void compareRolls() const;
 
 
 public:
+
+	// CONSTRUCTOR
 	Battle(Player* attacker);
-	void doBattle();	// attacker and defender will roll dice, rolls will be compared, until battle is over
 
+	// SERVICE METHOD'
 
+	// this function is the "battle driver", and goes through all steps of the battle phase (country selection, dice rolling, battle, etc)
+	void doBattle();
 
 };
 
+
+// this function is called from the game driver at the beginning of the battle phase, and initiates the battle
 void attackPhase(Player* attacker);
 
 

@@ -9,28 +9,52 @@ class Player {
 
 private:
 
-	// data members
-	std::string name; 					// player's name
+	// DATA MEMBERS
+	std::string name; 				// player's name
 	Country** ownedCountries;		// collection of counties owned by the player
 	int numOfOwnedCountries;		// number of countries owned by player
 
 
 public:
 	
-	// Constructors
-	Player();
-	Player(std::string aName);
-	Player(std::string aName, Country** countries, int num);
+	// Constructors 
+	// Note: Constructions were implemented as inline due to their simple, single-line code
+	Player() {
+
+	}
+	Player(std::string aName) : name(aName) {
+
+	}
+	Player(std::string aName, Country** countries, int num) : name(aName), ownedCountries(countries), numOfOwnedCountries(num) {
+
+	}
+
 
 	// Mutators
-	void setOwnedCountries(Country** countries);
-	void setName(std::string aName);
-	void setNumOwnedCountries(int num);
+	// Note: Mutators were implemented as inline due to their simple, single-line code
+	void setOwnedCountries(Country** countries) {
+		ownedCountries = countries;
+	}
+	void setName(std::string aName) {
+		name = aName;
+	}
+	void setNumOwnedCountries(int num) {
+		numOfOwnedCountries = num;
+	}
+
 
 	// Accessors
-	std::string getName();
-	Country** getOwnedCountries();
-	int getNumOfOwnedCountries(); 
+	// Note: Accessors were implemented as inline due to their simple, single-line code
+	std::string getName() const{
+		return name;
+	}
+	Country** getOwnedCountries() const{
+		return ownedCountries;
+	}
+	int getNumOfOwnedCountries() const {
+		return numOfOwnedCountries;
+	}
+
 
 	
 
