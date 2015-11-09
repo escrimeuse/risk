@@ -6,6 +6,7 @@
 
 #include<string>
 #include<list>
+#include <iostream>
 using namespace std;
 
 #include"Continent.h"
@@ -19,6 +20,7 @@ Continent::Continent() {
 	countries = new vector<Country*>;
 	numCountries = 0;
 	controlValue = (rand() % 10) + 1;
+	cout << "Control value is " << controlValue << endl;
 }
 
 //accessors used to be inline, but it caused a problem with the linker.

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int Player::numCardSetsTradedIn = 0;
+int Player::numCardSetsTradedIn = 0;	// initialized to zero at the beginning of the game, as there have not been any card sets traded in yet
 
 Player::Player(): name(NULL), ownedCountries(new list<Country*>), ownedContinents(new list<Continent*>), numOfOwnedCountries(0), numOfOwnedContinents(0), numCardsArtillery(0), numCardsCavalry(0), numCardsInfantry(0), playersArtilleryCards(new list<Card*>), playersCavalryCards(new list<Card*>), playersInfantryCards(new list<Card*>), playersWildCards(new list<Card*>) {
 
@@ -20,6 +20,88 @@ Player::Player(std::string aName, list<Country*> *countries, list<Continent*> *c
 	numOfOwnedCountries = ownedCountries->size();
 	numOfOwnedContinents = ownedContinents->size();
 };
+
+Country* Player::getCountry(int id) {
+	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
+		if ((*i)->getId() == id) {
+			return (*i);
+		}
+	}
+
+	return NULL;
+}
+
+Card* Player::getCard(string name) {
+	string lowercaseName = "";
+
+	// convert to lowercase
+	for (int i = 0; i < name.length(); ++i) {
+		lowercaseName += name.substr(i, 1);
+	}
+
+	// search through artillery cards
+	for (list<Card*>::iterator i = playersArtilleryCards->begin(); i != playersArtilleryCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return (*i);
+		}
+
+	}
+
+	//search through cavalry cards
+	for (list<Card*>::iterator i = playersCavalryCards->begin(); i != playersCavalryCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return (*i);
+		}
+
+	}
+
+	//search through infantry cards
+	for (list<Card*>::iterator i = playersInfantryCards->begin(); i != playersInfantryCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return (*i);
+		}
+
+	}
+
+	//search through wild cards
+	for (list<Card*>::iterator i = playersWildCards->begin(); i != playersWildCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return (*i);
+		}
+
+	}
+
+
+	return NULL;
+}
 
 void Player::addOwnedCountry(Country* countryToAdd) {
 
@@ -132,6 +214,91 @@ void Player::removePlayerCard(Card* removeCard) {
 
 };
 
+bool Player::validateCountryIDSelection(int id) {
+
+	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
+		if ((*i)->getId() == id) {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+bool Player::validateCardSelection(string name) {
+
+	string lowercaseName = "";
+
+	// convert to lowercase
+	for (int i = 0; i < name.length(); ++i) {
+		lowercaseName += name.substr(i, 1);
+	}
+
+	// search through artillery cards
+	for (list<Card*>::iterator i = playersArtilleryCards->begin(); i != playersArtilleryCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += (*i)->getCountryOnCard().substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return true;
+		}
+
+	}
+
+	//search through cavalry cards
+	for (list<Card*>::iterator i = playersCavalryCards->begin(); i != playersCavalryCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += (*i)->getCountryOnCard().substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return true;
+		}
+
+	}
+
+	//search through infantry cards
+	for (list<Card*>::iterator i = playersInfantryCards->begin(); i != playersInfantryCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += (*i)->getCountryOnCard().substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return true;
+		}
+
+	}
+
+	//search through wild cards
+	for (list<Card*>::iterator i = playersWildCards->begin(); i != playersWildCards->end(); ++i) {
+
+		string lowercaseCountry = "";
+		// convert to lowercase
+		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
+			lowercaseCountry += (*i)->getCountryOnCard().substr(j, 1);
+		}
+
+		if (lowercaseCountry.compare(lowercaseName) == 0) {
+			return true;
+		}
+
+	}
+
+
+	return false;
+}
+
+// this function displays to the screen all the cards owned by the player
 void Player::displayCards(cardType type) {
 
 	if (type == infantry) {
@@ -212,121 +379,7 @@ void Player::displayCards(cardType type) {
 
 }
 
-bool Player::validateCardSelection(string name) {
-
-	string lowercaseName = "";
-
-	// convert to lowercase
-	for (int i = 0; i < name.length(); ++i) {
-		lowercaseName += name.substr(i, 1);
-	}
-
-	// search through artillery cards
-	for (list<Card*>::iterator i = playersArtilleryCards->begin(); i != playersArtilleryCards->end(); ++i) {
-		
-		string lowercaseCountry = "";
-		// convert to lowercase
-		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
-			lowercaseCountry += name.substr(j, 1);
-		}
-
-		if (lowercaseCountry.compare(lowercaseName) == 0) {
-			return true;
-		}
-
-	}
-
-	//search through cavalry cards
-	for (list<Card*>::iterator i = playersCavalryCards->begin(); i != playersCavalryCards->end(); ++i) {
-
-		string lowercaseCountry = "";
-		// convert to lowercase
-		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
-			lowercaseCountry += name.substr(j, 1);
-		}
-
-		if (lowercaseCountry.compare(lowercaseName) == 0) {
-			return true;
-		}
-
-	}
-
-	//search through infantry cards
-	for (list<Card*>::iterator i = playersInfantryCards->begin(); i != playersInfantryCards->end(); ++i) {
-
-		string lowercaseCountry = "";
-		// convert to lowercase
-		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
-			lowercaseCountry += name.substr(j, 1);
-		}
-
-		if (lowercaseCountry.compare(lowercaseName) == 0) {
-			return true;
-		}
-
-	}
-
-
-	return false;
-}
-
-Card* Player::getCard(string name) {
-	string lowercaseName = "";
-
-	// convert to lowercase
-	for (int i = 0; i < name.length(); ++i) {
-		lowercaseName += name.substr(i, 1);
-	}
-
-	// search through artillery cards
-	for (list<Card*>::iterator i = playersArtilleryCards->begin(); i != playersArtilleryCards->end(); ++i) {
-
-		string lowercaseCountry = "";
-		// convert to lowercase
-		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
-			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
-		}
-
-		if (lowercaseCountry.compare(lowercaseName) == 0) {
-			return (*i);
-		}
-
-	}
-
-	//search through cavalry cards
-	for (list<Card*>::iterator i = playersCavalryCards->begin(); i != playersCavalryCards->end(); ++i) {
-
-		string lowercaseCountry = "";
-		// convert to lowercase
-		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
-			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
-		}
-
-		if (lowercaseCountry.compare(lowercaseName) == 0) {
-			return (*i);
-		}
-
-	}
-
-	//search through infantry cards
-	for (list<Card*>::iterator i = playersInfantryCards->begin(); i != playersInfantryCards->end(); ++i) {
-
-		string lowercaseCountry = "";
-		// convert to lowercase
-		for (int j = 0; j < ((*i)->getCountryOnCard()).length(); ++j) {
-			lowercaseCountry += ((*i)->getCountryOnCard()).substr(j, 1);
-		}
-
-		if (lowercaseCountry.compare(lowercaseName) == 0) {
-			return (*i);
-		}
-
-	}
-
-
-	return NULL;
-}
-
+// this function drives the reinforcement phase. It calculates the number of armies that can be placed, and allows the user to select where the armies are added
 void Player::reinforceCountries() {
 
 	// step 1: determine total number of armies
@@ -335,14 +388,14 @@ void Player::reinforceCountries() {
 	int totalNumArmies = 0;
 
 	// at the baseline, the number of armies available for reinforcement is equal to the floor of the number of countries owned divided by 3
-	totalNumArmies+=floor(numOfOwnedCountries / 3);
+	totalNumArmies += floor(numOfOwnedCountries / 3);
 	if (totalNumArmies < 3) {
 		totalNumArmies = 3;
 	}
 
 	// next, we check if the player owns any continents
 	// if they own any continents, then we add the continent's control value to the number of armies available for reinforcement
-	if (numOfOwnedContinents != 0) {
+	if (ownedContinents->size() != 0) {
 		for (list<Continent*>::iterator i = ownedContinents->begin(); i != ownedContinents->end(); ++i) {
 			totalNumArmies += (*i)->getControlValue();
 		}
@@ -354,11 +407,12 @@ void Player::reinforceCountries() {
 	Card* cardOne = NULL;
 	Card* cardTwo = NULL;
 	Card* cardThree = NULL;
-	if (numCardsArtillery+numCardsInfantry+numCardsCavalry+numCardsWild>= 3) {
-		
+	while (numCardsArtillery + numCardsInfantry + numCardsCavalry + numCardsWild >= 3) {
+
+
 		bool hasSetArtillery = false;
 		bool hasSetCavalry = false;
-		bool hasSetInfantry = false; 
+		bool hasSetInfantry = false;
 		bool hasSetDifferentTypes = false;
 		bool hasWildCardSet = false;
 
@@ -381,9 +435,9 @@ void Player::reinforceCountries() {
 		if (numCardsWild >= 1 && (numCardsArtillery + numCardsArtillery + numCardsInfantry >= 2)) {
 			hasWildCardSet = true;
 		};
-		
+
 		if (hasSetArtillery || hasSetCavalry || hasSetInfantry || hasSetDifferentTypes || hasWildCardSet) {
-			
+
 			cout << name << ", you have the following cards (# indicates that you also own that country): " << endl;
 			displayCards(infantry);
 			displayCards(cavalry);
@@ -391,7 +445,7 @@ void Player::reinforceCountries() {
 			displayCards(wild);
 
 			bool validSetSelected = false;
-			
+
 
 			while (!validSetSelected) {
 
@@ -433,9 +487,7 @@ void Player::reinforceCountries() {
 				if (cardOne->getTypeOfCard() == cardTwo->getTypeOfCard() == cardThree->getTypeOfCard()) {
 					validSetSelected = true;
 				}
-				else if ((cardOne->getTypeOfCard() == infantry && cardTwo->getTypeOfCard() == infantry && cardThree->getTypeOfCard() == infantry) ||
-					(cardOne->getTypeOfCard() == cavalry && cardTwo->getTypeOfCard() == cavalry&& cardThree->getTypeOfCard() == cavalry) ||
-					(cardOne->getTypeOfCard() == artillery && cardTwo->getTypeOfCard() == artillery && cardThree->getTypeOfCard() == artillery)) {
+				else if (cardOne->getTypeOfCard() != cardTwo->getTypeOfCard() && cardTwo->getTypeOfCard() != cardThree->getTypeOfCard()) {
 					validSetSelected = true;
 				}
 				else if (cardOne->getTypeOfCard() == wild || cardTwo->getTypeOfCard() == wild || cardThree->getTypeOfCard() == wild) {
@@ -451,6 +503,11 @@ void Player::reinforceCountries() {
 			}
 
 		}
+		else {
+			cout << "Sorry, you have no exchangable card sets right now!" << endl;
+			break;
+		}
+
 		// now that we have a valid selection, we will exchange the cards for armies 
 
 		// first we need to check if any other players have exchanged cards yet. As per Risk rules, the number of armies that a 
@@ -483,24 +540,30 @@ void Player::reinforceCountries() {
 		}
 
 
+		cout << "Would you like to exchange more card sets for armies? ";
+		char exchangeMore;
+		cin >> exchangeMore;
+		if (exchangeMore == 'y' || exchangeMore == 'Y') {
+			continue;
+		}
+		else {
+			break;
+		}
 
-
-
-		
-
-
-		
 
 	}
 
-	
+	if (numCardsArtillery + numCardsInfantry + numCardsCavalry + numCardsWild <3) {
+		cout << "Sorry, you have no exchangable card sets right now." << endl;
+	}
+
 	// Step 2: user-driven placement of armies
-	
-	
+
+
 
 	while (totalNumArmies != 0) {
 		cout << "You have " << totalNumArmies << " armies to place on any of the following countries: " << endl;
-		cout << "COUNTRY ID\t\tCOUNTRY NAME\t\tCURRENT # OF ARMIES" << endl;
+		cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
 		for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
 			cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
 		}
@@ -516,51 +579,29 @@ void Player::reinforceCountries() {
 		}
 		cout << endl;
 		cout << "Type the number of armies that you would like to place on the selected country: " << endl;
-		cin >> numArmiesToPlaceOnCountry; 
+		cin >> numArmiesToPlaceOnCountry;
 		while (numArmiesToPlaceOnCountry > totalNumArmies || numArmiesToPlaceOnCountry < 0) {
 			cout << "ERROR: The number of armies is invalid. Please enter the number of armies again: ";
 			cin >> numArmiesToPlaceOnCountry;
 		}
-		
+
 		Country* country = getCountry(countryID);
 		country->setArmies(country->getArmies() + numArmiesToPlaceOnCountry);
 		totalNumArmies -= numArmiesToPlaceOnCountry;
 
-			
+
 
 	}
 	cout << "Completed reinforcement phase for " << getName() << endl;
 	cout << "The number of armies on each country for " << getName() << " is as follows: " << endl;
-	cout << "COUNTRY ID\t\tCOUNTRY NAME\t\tCURRENT # OF ARMIES" << endl;
+	cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
 	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
 		cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
 	}
-	
-	
+
+
 
 };
-
-bool Player::validateCountryIDSelection(int id) {
-
-	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
-		if ((*i)->getId() == id) {
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-Country* Player::getCountry(int id) {
-	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
-		if ((*i)->getId() == id) {
-			return (*i);
-		}
-	}
-
-	return NULL;
-}
-
 
 
 

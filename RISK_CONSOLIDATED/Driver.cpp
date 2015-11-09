@@ -17,6 +17,7 @@ int main() {
 	country1->setOwner(player1);
 	country2->setOwner(player1);
 
+	player1->addOwnedContinent(new Continent());
 	player1->addOwnedCountry(country1);
 	player1->addOwnedCountry(country2);
 
@@ -25,7 +26,9 @@ int main() {
 	player1->addPlayerCard(new Card("China", infantry));
 	player1->addPlayerCard(new Card("USA", cavalry));
 	player1->addPlayerCard(new Card("Japan", cavalry));
-	player1->addPlayerCard(new Card("Poop", cavalry));
+	player1->addPlayerCard(new Card("Australia", cavalry));
+	player1->addPlayerCard(new Card("England", artillery));
+	player1->addPlayerCard(new Card("France", wild));
 
 	player1->reinforceCountries();
 

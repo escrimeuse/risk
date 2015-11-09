@@ -25,10 +25,10 @@ private:
 	int numCardsCavalry;
 	int numCardsArtillery;
 	int numCardsWild;
-	static int numCardSetsTradedIn;		// total number of card sets traded in
-	bool validateCardSelection(string name); 
+	static int numCardSetsTradedIn;		// total number of card sets traded in across the game
+	bool validateCardSelection(string name);	
 	bool validateCountryIDSelection(int id);
-	Card* getCard(string name);
+	Card* getCard(string name);		// returns the card corresponding to the name passed as an argument
 	Country* getCountry(int id);
 
 public:
@@ -120,6 +120,7 @@ public:
 		return playersWildCards;
 	};
 	void addPlayerCard(Card* newCard);
+	void removePlayerCard(Card* removeCard);
 	void displayCards(cardType type); 
 	
 
