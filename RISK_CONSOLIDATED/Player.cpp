@@ -416,6 +416,7 @@ void Player::reinforceCountries() {
 	Card* cardOne = NULL;
 	Card* cardTwo = NULL;
 	Card* cardThree = NULL;
+	bool startOfReinforcementPhase = true;
 	while (numCardsArtillery + numCardsInfantry + numCardsCavalry + numCardsWild >= 3) {
 
 
@@ -441,7 +442,7 @@ void Player::reinforceCountries() {
 			hasSetDifferentTypes = true;
 		};
 
-		if (numCardsWild >= 1 && (numCardsArtillery + numCardsArtillery + numCardsInfantry >= 2)) {
+		if (numCardsWild >= 1 && (numCardsArtillery + numCardsCavalry + numCardsInfantry >= 2)) {
 			hasWildCardSet = true;
 		};
 
@@ -453,13 +454,26 @@ void Player::reinforceCountries() {
 			displayCards(artillery);
 			displayCards(wild);
 
+			// as per Risk rules, if the number of cards in a player's possession at the beginning of the reinforcement
+			// phase is 5 ot 6, then they MUST exchange at least 3 of their cards for armies
+			if (!(startOfReinforcementPhase &&
+				(numCardsArtillery + numCardsCavalry + numCardsInfantry + numCardsWild == 6 ||
+					numCardsArtillery + numCardsCavalry + numCardsInfantry + numCardsWild == 5))) {
+				cout << "Would you like to exchange cards for armies (Y or N)? ";
+				char exchangeForArmies;
+				cin >> exchangeForArmies;
+				if (exchangeForArmies == 'N' || exchangeForArmies == 'n') {
+					cout << "You chose to not exchange cards for armies." << endl;
+					break;
+				}
+			}
+			
+
 			bool validSetSelected = false;
-
-
 			while (!validSetSelected) {
 
 				cout << endl;
-				cout << "Enter the country name of the cards you would like to exchange. Do not include the # if present. Note that cards "
+				cout << "Enter the country name of the cards you would like to exchange. Do not include the # symbol if present. Note that cards "
 					<< " with # next to them are worth 2 extra armies, which will be automatically placed on that country." << endl;
 				cout << "Card 1: ";
 				string card1, card2, card3;
@@ -493,7 +507,7 @@ void Player::reinforceCountries() {
 				// 3 - one wild card plus two cards of any type
 
 
-				if (cardOne->getTypeOfCard() == cardTwo->getTypeOfCard() == cardThree->getTypeOfCard()) {
+				if (cardOne->getTypeOfCard() == cardTwo->getTypeOfCard() && cardTwo->getTypeOfCard() == cardThree->getTypeOfCard()) {
 					validSetSelected = true;
 				}
 				else if (cardOne->getTypeOfCard() != cardTwo->getTypeOfCard() && cardTwo->getTypeOfCard() != cardThree->getTypeOfCard()) {
@@ -525,6 +539,10 @@ void Player::reinforceCountries() {
 		totalNumArmies += 5;
 		totalNumArmies += 5 * getNumCardSetsTradedIn();
 		setNumCardSetsTradedIn(getNumCardSetsTradedIn() + 1);
+		cout << "Exchanging the following cards for " << 5 * getNumCardSetsTradedIn() << " armies: " << endl;
+		cout << "CARD 1: " << cardOne->getCountryOnCard() << endl;
+		cout << "CARD 2: " << cardTwo->getCountryOnCard() << endl;
+		cout << "CARD 3: " << cardThree->getCountryOnCard() << endl;
 		removePlayerCard(cardOne);
 		removePlayerCard(cardTwo);
 		removePlayerCard(cardThree);
@@ -559,6 +577,7 @@ void Player::reinforceCountries() {
 			break;
 		}
 
+		startOfReinforcementPhase = false;
 
 	}
 
