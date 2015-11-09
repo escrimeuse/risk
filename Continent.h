@@ -1,4 +1,4 @@
-// Assignment #1 - COMP345 - Section DI - Fall 2015
+// Assignment #2 - COMP345 - Section DI - Fall 2015
 // Author: Jennifer Sunahara (27590628)
 //
 //This is the header file Continent.h. This is the interface for the class Continent.
@@ -16,11 +16,13 @@ using namespace std;
 class Continent {
 public:
 	Continent(); //  id is set automatically with static int continentCount
+	~Continent();
 	string getName() const;
 	string getOwner() const;
 	bool getIsOwned() const;
 	int getNumCountries() const;
 	string getCountryNames() const;
+	vector<Country*>* getCountries() const;
 	void setName(string n);
 	void setOwner(string o);
 	static int getCount();

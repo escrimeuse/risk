@@ -1,4 +1,4 @@
-// Assignment #1 - COMP345 - Section DI - Fall 2015
+// Assignment #2 - COMP345 - Section DI - Fall 2015
 // Author: Jennifer Sunahara (27590628)
 //
 //This is the implementation file Continent.cpp of the class Continent.
@@ -18,6 +18,9 @@ Continent::Continent() {
 	isOwned = false;
 	countries = new vector<Country*>;
 	numCountries = 0;
+}
+Continent::~Continent() {
+	delete countries;
 }
 
 //accessors used to be inline, but it caused a problem with the linker.
@@ -53,6 +56,11 @@ string Continent::getCountryNames() const {
 	else
 		return "No countries";
 }
+
+vector<Country*>* Continent::getCountries() const {
+	return countries;
+}
+
 
 void Continent::setName(string n) {
 	name = n;

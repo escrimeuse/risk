@@ -1,4 +1,4 @@
-// Assignment #1 - COMP345 - Section DI - Fall 2015
+// Assignment #2 - COMP345 - Section DI - Fall 2015
 // Author: Jennifer Sunahara (27590628)
 //
 //This is the header file Country.h. This is the interface for the class Country.
