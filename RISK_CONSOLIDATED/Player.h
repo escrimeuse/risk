@@ -36,6 +36,7 @@ public:
 	Player();
 	Player(std::string aName);
 	Player(std::string aName, list<Country*> *countries, list<Continent*> *continents, int num, int art, int cav, int infan);
+	~Player();
 	void setOwnedCountries(list<Country*> *countries) {
 		ownedCountries = countries;
 	};

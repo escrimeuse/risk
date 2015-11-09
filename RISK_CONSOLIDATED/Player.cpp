@@ -21,6 +21,15 @@ Player::Player(std::string aName, list<Country*> *countries, list<Continent*> *c
 	numOfOwnedContinents = ownedContinents->size();
 };
 
+Player::~Player() {
+	delete ownedCountries;
+	delete ownedContinents;
+	delete playersInfantryCards;
+	delete playersCavalryCards;
+	delete playersArtilleryCards;
+	delete playersWildCards;
+}
+
 Country* Player::getCountry(int id) {
 	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
 		if ((*i)->getId() == id) {
