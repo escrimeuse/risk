@@ -17,6 +17,8 @@ using namespace std;
 
 //Constructor makes demo map with 6 countries and 3 continents
 MapDemo::MapDemo(string n): Map(n, DEMO_MAP_NUM_COUNTRIES, DEMO_MAP_NUM_CONTINENTS){
+	//type
+	setType("MAPDEMO");
 	//making the continents
 	for (int i = 0; i < Map::getNumContinents(); i++) {
 		Continent *newContinent = new Continent();
@@ -52,8 +54,10 @@ MapDemo::MapDemo(string n): Map(n, DEMO_MAP_NUM_COUNTRIES, DEMO_MAP_NUM_CONTINEN
 
 }
 
-MapDemo::~MapDemo() {
-
+bool MapDemo::checkIsAdjacentByIndex(int c1, int c2) {
+	if((countriesAdj)[c1][c2] == true)
+		return true;
+	return false;
 }
 
 bool MapDemo::checkContinentsValid() {
@@ -71,10 +75,10 @@ bool MapDemo::checkContinentsValid() {
 
 		vector<Country*> *contCountries = current->getCountries();// get list of countries for continent i
 
-		for (int j = 0; j < contCountries->size(); j++) {//going through the list of countries of continent i
+		for (int j = 0; j != (contCountries->size()); j++) {//going through the list of countries of continent i
 
 			int target1 = ((*contCountries)[j])->getId()-1; // target1 is id-1 of country j
-			for (int k = 0; k < contCountries->size(); k++) {
+			for (int k = 0; k != (contCountries->size()); k++) {
 
 				int target2 = ((*contCountries)[k])->getId()-1;//target2 is  id-1 of country k
 				if (countriesAdj[target1][target2] == true) // if country j is adjacent to country k

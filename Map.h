@@ -32,11 +32,13 @@ public:
 	bool getContinentsValid();
 	string getContinentNames() const;
 	string getCountryNames() const;
+	string getType();//no setType as it is set in the constructor
 	
 	void setCountryNames();
 	void setContinentNames();
 	void setIsConnected(bool b); // set in checkIsConnected
 	void setContinentsValid(bool b); //set in checkContinentsValid
+	void setType(string s);
 
 	void addContinent(Continent* c);
 	void addCountry(Country* c);
@@ -47,12 +49,14 @@ public:
 	virtual void demoMap()=0;//function specifically for the demo, used to set up the map
 
 	virtual void makeAdjacent(string c1, string c2) = 0;//updates the adjacency matrices
+	virtual bool checkIsAdjacentByIndex(int c1, int c2) = 0;//check if c1 and c2 are adjacent via their id
 	virtual bool checkIsConnected() = 0;// called by getIsConnected
 	virtual bool checkContinentsValid() = 0;// called by getContinentsValid
 	virtual void visitingMap(int x) = 0;//helper function for checkIsConnected
 
 private:
 	string name;
+	string type;
 	int numCountries;
 	int numContinents;
 	vector<Continent*> *continents;

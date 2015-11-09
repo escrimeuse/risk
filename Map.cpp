@@ -87,6 +87,14 @@ bool Map::getContinentsValid() {
 	return continentsValid;
 }
 
+string Map::getType() {
+	return type;
+}
+
+void Map::setType(string s) {
+	type = s;
+}
+
 void Map::setContinentsValid(bool b) {
 	continentsValid = b;
 }

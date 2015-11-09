@@ -14,6 +14,7 @@ using namespace std;
 #include "Country.h"
 #include "Continent.h"
 #include "MapDemo.h"
+#include "SaveLoader.h"
 
 //organised the functions needed for the demo into its own namespace to avoid the global namespace
 namespace mapDemo {
@@ -175,22 +176,18 @@ namespace mapDemo {
 		case 3: {
 			cout << "Please note that after this section is completed, the program will end. If you wish to get back to the main menu, please restart the program." << endl;
 			Map* m = makeMap();
+			cout << endl;
+			cout << "Saving the map as 'TestMap.map'..." << endl;
+			SaverLoader *s = new SaverLoader("TestMap");
+			s->save(m);
+			cout << "Saved map as 'TestMap.map'" << endl;
 			delete m;
 			cout << "\nThat's it for this demo. To get back to the main menu, please restart the program.\n"
 				<< "Goodbye!\n";
 			exit(0);
 			break;//shouldn't reach this point
 		}
-		case 4: {
-			cout << "Please note that after this section is completed, the program will end. If you wish to get back to the main menu, please restart the program." << endl;
-			Map* m = makeMap();
-			delete m;
-			cout << "\nThat's it for this demo. To get back to the main menu, please restart the program.\n"
-				<< "Goodbye!\n";
-			exit(0);
-			break;//shouldn't reach this point
-		}
-		case 5: exit(0);
+		case 4: exit(0);
 		}
 	}
 }
@@ -207,8 +204,7 @@ int main() {
 			<< "[ 1 ] Test creating a country?\n"
 			<< "[ 2 ] Test creating a continent?\n"
 			<< "[ 3 ] Test creating a map?\n"
-			<< "[ 4 ] Test editing a map?\n"
-			<< "[ 5 ] Exit" << endl;
+			<< "[ 4 ] Exit" << endl;
 		string input = "";
 		getline(cin, input);
 
