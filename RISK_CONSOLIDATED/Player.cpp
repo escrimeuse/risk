@@ -567,7 +567,7 @@ void Player::reinforceCountries() {
 		}
 
 
-		cout << "Would you like to exchange more card sets for armies? ";
+		cout << "Would you like to exchange more card sets for armies (Y/N)? ";
 		char exchangeMore;
 		cin >> exchangeMore;
 		if (exchangeMore == 'y' || exchangeMore == 'Y') {
@@ -588,6 +588,22 @@ void Player::reinforceCountries() {
 	// Step 2: user-driven placement of armies
 
 
+	placeArmiesOnCountriesLoop(totalNumArmies);
+
+	cout << "Completed reinforcement phase for " << getName() << endl;
+	cout << "The number of armies on each country for " << getName() << " is as follows: " << endl;
+	cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
+	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
+		cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
+	}
+
+
+
+};
+
+
+
+void Player::placeArmiesOnCountriesLoop(int totalNumArmies) {
 
 	while (totalNumArmies != 0) {
 		cout << "You have " << totalNumArmies << " armies to place on any of the following countries: " << endl;
@@ -616,21 +632,7 @@ void Player::reinforceCountries() {
 		Country* country = getCountry(countryID);
 		country->setArmies(country->getArmies() + numArmiesToPlaceOnCountry);
 		totalNumArmies -= numArmiesToPlaceOnCountry;
-
-
-
-	}
-	cout << "Completed reinforcement phase for " << getName() << endl;
-	cout << "The number of armies on each country for " << getName() << " is as follows: " << endl;
-	cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
-	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
-		cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
+		cout << numArmiesToPlaceOnCountry << " armies have been placed on " << country->getName() << endl;
 	}
 
-
-
-};
-
-
-
-
+}

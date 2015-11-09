@@ -30,6 +30,7 @@ private:
 	bool validateCountryIDSelection(int id);
 	Card* getCard(string name);		// returns the card corresponding to the name passed as an argument
 	Country* getCountry(int id);
+	static int initalReinforcementNumArmiesPerPlayer;
 
 public:
 	
@@ -123,8 +124,11 @@ public:
 	void addPlayerCard(Card* newCard);
 	void removePlayerCard(Card* removeCard);
 	void displayCards(cardType type); 
-	
-
+	void initialReinforcement();
+	static void setInitalReinforcementNumArmiesPerPlayer(int num) {
+		initalReinforcementNumArmiesPerPlayer = num;
+	}
+	void placeArmiesOnCountriesLoop(int num);
 
 	
 
