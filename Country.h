@@ -7,19 +7,21 @@
 
 #pragma once
 #include<string>
+#include "Player.h"
 
 using namespace std;
 
 class Country {
 public:
 	Country(); // id is set automatically with static int countryCount
+	Country(string name, int id, int numArmies, bool owned, Player* owner);
 	string getName() const;
-	string getOwner() const;
+	Player* getOwner() const;
 	bool getIsOwned() const;
 	int getArmies() const;
 	int getId() const;
 	void setName(string n); 
-	void setOwner(string o);//string for now, will be a real Player class later
+	void setOwner(Player* o);
 	void setArmies(int a); 
 	static int getCount();
 	static void resetCount();//this method only exists for demo purposes (to reset the countryCount to 0 when a new menu option is selected)
@@ -29,7 +31,7 @@ private:
 	int id; 
 	string name;
 	bool isOwned;
-	string owner; //string for now, will be a real Player class later
+	Player*  owner; 
 	void setIsOwned(bool o);//set to true in setOwner only
 	int armies; //number of armies in a country
 	

@@ -1,44 +1,42 @@
-[MAPDEMO]
-Last save: 
-BubbleLand
+MAPDEMO
+PonyLand
 
-[COUNTRIES]
+
 6
-1/country1/none/0
-2/country2/none/0
-3/country3/none/0
-4/country4/none/0
-5/country5/none/0
-6/country6/none/0
+1 Asha none 0
+2 Bill none 0
+3 Cookie none 0
+4 Ducky none 0
+5 Evelyn none 0
+6 Frost none 0
 
-[CONTINENTS]
+
 3
-contA/2
+1 Shetland 2 5
 1
 2
-contB/2
+2 Icelandic 2 11
 3
 4
-contC/2
+3 Welsh 2 22
 5
 6
 
-[ADJENCENCIES]
-1	country1
+1
 1	1	0	0	0	1	
 
-2	country2
+2
 1	1	1	0	0	1	
 
-3	country3
+3
 0	1	1	1	1	0	
 
-4	country4
+4
 0	0	1	1	0	0	
 
-5	country5
+5
 0	0	1	0	1	1	
 
-6	country6
+6
 1	1	0	0	1	1	
 

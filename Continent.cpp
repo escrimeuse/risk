@@ -6,6 +6,7 @@
 
 #include<string>
 #include<list>
+#include <iostream>
 using namespace std;
 
 #include"Continent.h"
@@ -14,11 +15,22 @@ int Continent::continentCount = 0;
 
 Continent::Continent() {
 	id = ++continentCount;
-	owner = "";
+	owner = NULL;
 	isOwned = false;
 	countries = new vector<Country*>;
 	numCountries = 0;
+	controlValue = (rand() % 10) + 1;
 }
+
+Continent::Continent(string aname, int numC, int aid, int acontrolValue) {
+	id = aid;
+	owner = NULL;
+	isOwned = false;
+	countries = new vector<Country*>;
+	numCountries = numC;
+	controlValue = acontrolValue;
+}
+
 Continent::~Continent() {
 	delete countries;
 }
@@ -28,7 +40,7 @@ string Continent::getName() const {
 	return name;
 }
 
-string Continent::getOwner() const {
+Player* Continent::getOwner() const {
 	return owner;
 }
 
@@ -66,7 +78,7 @@ void Continent::setName(string n) {
 	name = n;
 }
 
-void Continent::setOwner(string o) {
+void Continent::setOwner(Player* o) {
 	owner = o;
 	setIsOwned(true);
 }
@@ -79,6 +91,10 @@ void Continent::setIsOwned(bool o) {
 void Continent::addCountry(Country* c) {
 	countries->push_back(c);
 	numCountries++;
+}
+
+int Continent::getControlValue() {
+	return controlValue;
 }
 
 //this method only exists for demo purposes (to reset the continentCount to 0 when a new menu option is selected)

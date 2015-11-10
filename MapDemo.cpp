@@ -111,10 +111,10 @@ bool MapDemo::checkContinentsValid() {
 
 void MapDemo::visitingContinent(int x, bool b[][DEMO_MAP_NUM_CONT_COUNTRIES]) {
 	//visit country x
-	cout << "Currently visiting country" << x << endl;
+	//cout << "Currently visiting country" << x << endl;
 	visitedContinent[x] = 1;
 	for (int i = 0; i < DEMO_MAP_NUM_CONT_COUNTRIES; i++) {
-		cout << "visitedContinent[i]: " << visitedContinent[i] << endl;
+		//cout << "visitedContinent[i]: " << visitedContinent[i] << endl;
 		if (((b)[x][i] == true) && (visitedContinent[i] == 0))//if country x is adjacent to country i and it has not been visited, then visit country i
 			visitingContinent(i, b);
 	}
@@ -141,7 +141,7 @@ bool MapDemo::checkIsConnected() {
 
 void MapDemo::visitingMap(int x) {
 	//visit country x
-	cout << "Currently visiting country" << x << endl;
+	//cout << "Currently visiting country" << x << endl;
 	visitedMap[x] = 1;
 	for (int i = 0; i < Map::getNumCountries(); i++) {
 		if ((countriesAdj)[x][i] == true && visitedMap[i] == 0)//if country x is adjacent to country i and it has not been visited, then visit country i
@@ -179,7 +179,39 @@ void MapDemo::makeAdjacent(string c1, string c2) {
 
 }
 
+//making two countries NOT adjacent, based on their names
+//if one of the names is not associated with a country, an error message is displayed
+void MapDemo::makeNotAdjacent(string c1, string c2) {
+	bool exists1 = false;
+	bool exists2 = false;
+	int target1;
+	int target2;
+	for (int i = 0; i < Map::getNumCountries(); i++) {
+		if (((*Map::getCountries())[i]->getName()) == c1) {
+			exists1 = true;//first country name is found
+			target1 = (*Map::getCountries())[i]->getId();
+		}
+	}
+	for (int i = 0; i < Map::getNumCountries(); i++) {
+		if (((*Map::getCountries())[i]->getName()) == c2) {
+			exists2 = true;//second country name is found
+			target2 = (*Map::getCountries())[i]->getId();
+		}
+	}
+	if (exists1 && exists2) {
+		if (c1.compare(c2) != 0) {//make sure the user isn't trying to make a country NOT adjacent to itself... rascals...
+			countriesAdj[target1 - 1][target2 - 1] = false;//modifying the adjacency matrix
+			countriesAdj[target2 - 1][target1 - 1] = false;
+			cout << c1 << " and " << c2 << " are now NOT adjacent." << endl;
+		}
+		else
+			cout << c1 << " and " << c2 << " are the same country and it MUST remain adjacent to itself." << endl;
+	}
+	else {
+		cout << "One or both of those countries do not exist." << endl;
+	}
 
+}
 
 //printing to the console the names of the countries adjacent to a country C, based on its name
 //if the names is not associated with a country, an error message is displayed
@@ -228,30 +260,24 @@ void MapDemo::printContinentsCountries(int n) {
 	cout << (*Map::getContinents())[n - 1]->getCountryNames() << " " << endl;
 }
 
-void MapDemo::demoMap() {
-	// country 1 is adjacent to country 2, 6
-	countriesAdj[0][1] = true;
+void MapDemo::demoMap1() {
+	// country 1 is adjacent to country 6
 	countriesAdj[0][5] = true;
 	printAdjacentCountryNamesById(1);
 
-	// country 2 is adjacent to country 1, 3, 6
-	countriesAdj[1][0] = true;
-	countriesAdj[1][2] = true;
+	// country 2 is adjacent to country 6
 	countriesAdj[1][5] = true;
 	printAdjacentCountryNamesById(2);
 
-	// country 3 is adjacent to country 2, 4, 5
-	countriesAdj[2][1] = true;
+	// country 3 is adjacent to country 4
 	countriesAdj[2][3] = true;
-	countriesAdj[2][4] = true;
 	printAdjacentCountryNamesById(3);
 
-	// country 4 is adjacent to country 3, 6
+	// country 4 is adjacent to country 3
 	countriesAdj[3][2] = true;
 	printAdjacentCountryNamesById(4);
 
-	// country 5 is adjacent to country 3, 6
-	countriesAdj[4][2] = true;
+	// country 5 is adjacent to country 6
 	countriesAdj[4][5] = true;
 	printAdjacentCountryNamesById(5);
 
@@ -259,6 +285,55 @@ void MapDemo::demoMap() {
 	countriesAdj[5][0] = true;
 	countriesAdj[5][1] = true;
 	countriesAdj[5][4] = true;
+	printAdjacentCountryNamesById(6);
+
+}
+
+void MapDemo::demoMap2() {
+	// country 1 is adjacent to country 2, 6
+	countriesAdj[0][1] = true;
+	printAdjacentCountryNamesById(1);
+
+	// country 2 is adjacent to country 1, 6
+	countriesAdj[1][0] = true;
+	printAdjacentCountryNamesById(2);
+
+	// country 3 is adjacent to country 4
+	printAdjacentCountryNamesById(3);
+
+	// country 4 is adjacent to country 3
+	printAdjacentCountryNamesById(4);
+
+	// country 5 is adjacent to country 6
+	printAdjacentCountryNamesById(5);
+
+	// country 6 is adjacent to country 1, 2, 5
+	printAdjacentCountryNamesById(6);
+
+}
+
+
+void MapDemo::demoMap3() {
+	// country 1 is adjacent to country 2, 6
+	printAdjacentCountryNamesById(1);
+
+	// country 2 is adjacent to country 1, 3, 6
+	countriesAdj[1][2] = true;
+	printAdjacentCountryNamesById(2);
+
+	// country 3 is adjacent to country 2, 4, 5
+	countriesAdj[2][1] = true;
+	countriesAdj[2][4] = true;
+	printAdjacentCountryNamesById(3);
+
+	// country 4 is adjacent to country 3, 6
+	printAdjacentCountryNamesById(4);
+
+	// country 5 is adjacent to country 3, 6
+	countriesAdj[4][2] = true;
+	printAdjacentCountryNamesById(5);
+
+	// country 6 is adjacent to country 1, 2, 5
 	printAdjacentCountryNamesById(6);
 
 }

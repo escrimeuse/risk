@@ -1,0 +1,35 @@
+DEMO
+MyBadMap3
+
+
+6
+1 Country1 none 0
+2 Country2 none 0
+3 Country3 none 0
+4 Country4 none 0
+5 Country5 none 0
+6 Country6 none 0
+
+3
+Continent1 2
+1
+2
+Continent2 2
+3
+4
+Continent3 2
+5
+6
+
+1
+1 1 0 0 0 0
+2
+1 1 1 0 0 0
+3
+0 1 1 1 0 0
+4
+0 0 1 1 0 0 
+5
+0 0 0 0 1 1
+6
+0 0 0 0 1 1

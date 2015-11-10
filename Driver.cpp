@@ -18,93 +18,8 @@ using namespace std;
 
 //organised the functions needed for the demo into its own namespace to avoid the global namespace
 namespace mapDemo {
-	static string uName;
-	static void welcome() {
-		cout << "=======================================================\n"
-			<<  "Welcome to Jennifer's Map Creation and Editing program!\n"
-			<<  "=======================================================\n"
-			<< "What is your first name?: ";
-		cin >> uName;
-		cout << "\nWelcome, " << uName << "." << endl;
-		std::cin.ignore();
-	}
-
-	//demonstration of the country-creation
-	static Country* makeCountry() {
-		string userIn;
-		int userNum = 0;
-		cout << "\nWhat is the name of the country you want to make?: ";
-		cin >> userIn;
-		Country *newCountry = new Country();
-		newCountry->setName(userIn);
-		cout <<"Current country count is: " << newCountry->getCount() << ".\n\n"
-			<< "There is no owner for " << newCountry->getName() <<". Who owns it?: ";
-		cin >> userIn;
-		newCountry->setOwner(userIn);
-		cout << "\n" << newCountry->getOwner() << " is the owner of " << newCountry->getName() << ".\n" << endl;
-		std::cin.ignore();
-		//making sure user inputs an int
-		while (true) {
-			cout << "There are " << newCountry->getArmies() << " armies in " << newCountry->getName() << ".\n"
-				<< "How many armies do you wish to put in " << newCountry->getName() << "?: ";
-			getline(cin, userIn);
-
-			// This code converts from string to number safely.
-			stringstream myStream(userIn);
-			if (myStream >> userNum) {
-				newCountry->setArmies(userNum);
-				cout << "There are " << newCountry->getArmies() << " armies in " << newCountry->getName() << ".\n\n"
-					<< "Congratulations, " << newCountry->getName() <<" is offcially a country!" << endl;
-				return newCountry;
-				break;
-			}
-			else
-				cout << "Not a valid choice. Please try again." << endl;
-		}
-
-		delete newCountry;
-		newCountry = NULL;
-		return newCountry; //shouldn't actually get here though
-		
-	}
-
-	//demonstration of the continent-creation
-	static Continent* makeContinent() {
-		string userIn;
-		int userNum = 0;
-		cout << "\nWhat is the name of the continent you want to make?: ";
-		cin >> userIn;
-		Continent *newContinent = new Continent();
-		newContinent->setName(userIn);
-		cout << "Current continent count is: " << newContinent->getCount() << ".\n\n"
-			<< "There are no countries in " << newContinent->getName() << "." << endl;
-		std::cin.ignore();//needed so getLine can function properly later
-
-		//making sure user inputs an int
-		while (true) {
-			cout << "How many countries do you wish to add to " << newContinent->getName() << "? (must be greater than 1): ";
-				getline(cin, userIn);
-
-			// This code converts from string to number safely.
-			stringstream myStream(userIn);
-			if (myStream >> userNum && userNum>1) {
-				for (int i = 0; i < userNum; i++) {
-					newContinent->addCountry(makeCountry()); //add the newly made country to the continent
-				}
-				cout << "\nAll countries had been made!" << endl;
-				break;
-			}
-			else
-				cout << "Not a valid choice. Please try again." << endl;
-		}
-		
-		cout << "The following countries are in " << newContinent->getName() << ": " << newContinent->getCountryNames() + ".\n"
-			 << "Congratulations, " << newContinent->getName() << " is a continent.\n\n"
-			 << "Please note: the concept of CONNECTIVITY is implemented in the Map option of the main menu." << endl;
-
-		return newContinent;
-	}
-
+	
+	
 	//demonstration of the map-creation
 	static MapDemo* makeMap() {
 		string mapName;
@@ -112,7 +27,7 @@ namespace mapDemo {
 		cout << "\nWhat is the name of the map you want to make?: ";
 		cin >> mapName;
 		MapDemo *newMap = new MapDemo(mapName);
-		cout << "\nCurrently, there is only one size of map available. " << newMap->getName() << " will have 3 continents, with 2 countries in each.\n\n"
+		cout << "\n" << newMap->getName() << " will have 3 continents, with 2 countries in each.\n\n"
 			<< "Please name your 3 continents: " << endl;
 		newMap->setContinentNames();
 		cout << "All continents have been named. The names are: " << newMap->getContinentNames() << "\n"
@@ -127,7 +42,55 @@ namespace mapDemo {
 		newMap->printContinentsCountries(3);
 		cout << endl;
 
-		newMap->demoMap(); //function creates adjacencies between countries
+		//DEMO1 phase
+		cout << "\n DEMO1: Creating an incompletely connected map..." << endl;
+		newMap->demoMap1(); //function creates adjacencies between countries
+
+		string check = "";
+		if (newMap->getContinentsValid())//test if the map's continents are valid
+			check = "true";
+		else
+			check = "false";
+		cout << "\nContinents Valid?: "<< check << endl;
+
+		check = ""; // precaution...
+		if (newMap->getIsConnected())//test if the map is connected
+			check = "true";
+		else
+			check = "false";
+		cout << "\nAll countries connected?: " << check << endl;
+		
+		//DEMO2 phase
+		cout << "\n DEMO2: Adding adjacencies to have valid continents..." << endl;
+		newMap->demoMap2(); //function creates more adjacencies between countries
+		if (newMap->getContinentsValid())//test if the map's continents are valid
+			check = "true";
+		else
+			check = "false";
+		cout << "\nContinents Valid?: " << check << endl;
+
+		check = ""; // precaution...
+		if (newMap->getIsConnected())//test if the map is connected
+			check = "true";
+		else
+			check = "false";
+		cout << "\nAll countries connected?: " << check << endl;
+
+		//DEMO3 phase
+		cout << "\n DEMO3: Adding adjacencies to have connected map..." << endl;
+		newMap->demoMap3(); //function creates more adjacencies between countries
+		if (newMap->getContinentsValid())//test if the map's continents are valid
+			check = "true";
+		else
+			check = "false";
+		cout << "\nContinents Valid?: " << check << endl;
+
+		check = ""; // precaution...
+		if (newMap->getIsConnected())//test if the map is connected
+			check = "true";
+		else
+			check = "false";
+		cout << "\nAll countries connected?: " << check << endl;
 
 		//allow user to create adjacency
 		cout << "\nLet's make 2 more countries adjacent."
@@ -140,81 +103,245 @@ namespace mapDemo {
 		newMap->makeAdjacent(c1, c2);
 		newMap->printAdjacentCountryNames(c1);
 		newMap->printAdjacentCountryNames(c2);
-		
-		
-
-		//test if the map's continents are valid
-		cout << "\nNow to check if the map's continents are valid." << endl;
-		cout << newMap->getContinentsValid() << endl;
-		cout << "If the number on the line above is 1, the map's continents are valid, if it is 0, they are not valid." << endl;
-
-		//test if the map is connected
-		cout << "\nNow to check if the map is connected." << endl;
-		cout << newMap->getIsConnected() << endl;
-		cout << "If the number on the line above is 1, the map is connected, if it is 0, it is not connected." << endl;
 
 		std::cin.ignore();
 		return newMap;
 		
 	}
 
-	//choices of the user from the main menu
-	static void userAction(int choice) {
+	//making changes to the map
+	static int mapEditAction(int choice, Map *m) {
+		switch (choice) {
+			case 1: {cout << "The map's current name is " << m->getName() << ". What is its new name?: ";
+				string input = "";
+				getline(cin, input);
+				m->setName(input);
+				cout << "The map's name is " << m->getName() << ".\n";
+				return 0;
+			}
+			case 2: {cout << "CONTINENTS: " << m->getContinentNames() << "\n"
+				<< "Which continent's name do you want to change?: ";
+				string toChange = "";
+				string changeTo = "";
+				getline(cin, toChange);
+				cout << "What do you want to change it to?: ";
+				getline(cin, changeTo);
+				Continent *target = m->getContinentByName(toChange);
+				if (target != NULL) {
+					target->setName(changeTo);
+					cout << "Continent name is " << target->getName()<<".\n";
+				}
+				else {
+					cout << toChange << " is not a valid country name. \n";
+				}				
+			}
+			case 3: {cout << "COUNTRIES: " << m->getCountryNames() << "\n"
+				<< "Which country's name do you want to change?: ";
+				string toChange = "";
+				string changeTo = "";
+				getline(cin, toChange);
+				cout << "What do you want to change it to?: ";
+				getline(cin, changeTo);
+				Country *target = m->getCountryByName(toChange);
+				if (target != NULL) {
+					target->setName(changeTo);
+					cout << "Country name is " << target->getName() << ".\n";
+				}
+				else {
+					cout << toChange << " is not a valid country name. \n";
+				}
+			}
+			case 4: case 5: {cout << "SOON!..." << endl;
+				return 0; }
+			case 6: { return 500; }//return to main menu
+		}
+		return 0;
+	}
+
+	//demonstration of the map-editing
+	static int editMap(Map *m) {
+		cout << "==========================\n"
+			<< "Welcome to the Map Editor!\n"
+			<< "==========================\n";
+
+		while (true) {
+			cout << "\nWhat do you wish to edit?\n"
+				<< "[ 1 ] Map name\n"
+				<< "[ 2 ] A continent's name\n"
+				//<< "COUNTRIES: " <<m->getCountryNames()<<"\n"
+				<< "[ 3 ] A country's name\n"
+				<< "[ 4 ] Add country's adjacencies\n"
+				<< "[ 5 ] Remove country's adjacencies\n"
+				<< "[ 6 ] Exit" << endl;
+			string input = "";
+			getline(cin, input);
+
+			// This code converts from string to number safely.
+			stringstream myStream(input);
+			int userChoice = 0;
+			if (myStream >> userChoice) {
+				int check = mapEditAction(userChoice, m);
+				if (check == 500)
+					return 500; //if mapCreation returned 500, return to main menu
+			}
+			else
+				cout << "Not a valid choice. Please try again" << endl;
+		}
+		return 0;//shouldn't reach this
+	}
+
+	static int mapCreator(int choice) {
 		switch (choice) {
 		case 1: {
-			Country* c = makeCountry();
-			c->resetCount();
-			delete c;
-			break; 
-		}
-		case 2: {
-			Continent * c = makeContinent();
-			c->resetCount();
-			delete c;
-			break;
-		}
-		case 3: {
-			cout << "Please note that after this section is completed, the program will end. If you wish to get back to the main menu, please restart the program." << endl;
 			Map* m = makeMap();
 			cout << endl;
 			cout << "Saving the map as 'TestMap.map'..." << endl;
 			SaverLoader *s = new SaverLoader("TestMap");
 			s->save(m);
 			cout << "Saved map as 'TestMap.map'" << endl;
-			delete m;
-			cout << "\nThat's it for this demo. To get back to the main menu, please restart the program.\n"
-				<< "Goodbye!\n";
-			exit(0);
-			break;//shouldn't reach this point
+			return 0;
 		}
-		case 4: exit(0);
+		case 2: case 3: case 4: {
+			cout << "\n[ FEATURE CURRENTLY UNAVAILABLE :( ]\n";
+			return 0;//return to map creation menu
+		}
+		case 5: { return 500; }//return to main menu
+		}
+		return 0;//shouldnt' reach here, but will return to main menu
+	}
+
+	static int mapEditor(int choice) {
+		switch (choice) {
+			case 1: {//Edit good map
+				cout << "Edit good map";
+				SaverLoader *s = new SaverLoader("TestMap");
+				Map *m = s->load();
+				if (m != NULL) {
+					editMap(m);
+					return 0;
+				}
+				else {
+					cout << "Invalid map! SHAME!" << endl;
+					return 0;
+				}
+								
+			}
+			case 2: {//Edit bad1 map
+				cout << "Attempting to load map...";
+				//should be rejected
+				return 0;
+			}
+			case 3: {//Edit bad2 map
+				cout << "Attempting to load map...";
+				//should be rejected
+				return 0;
+			}
+			case 4: {//Edit bad3 map
+				cout << "Attempting to load map...";
+				//should be rejected
+				return 0;
+			}
+			case 5: { return 500; }//return to main menu
+		}
+		return 0;	//should not reach
+	}
+
+	//choices of the user from the map 
+	static int mapAction(int choice) {
+		switch (choice) {
+		case 1: {
+			cout << "==========================\n"
+				<< "Welcome to the Map Creator!\n"
+				<< "==========================\n";
+
+			while (true) {
+				cout << "\nWhat size map would you like to create:\n"
+					<< "[ 1 ] Demo (2 players)\n"
+					<< "[ 2 ] Small (2-3 players)\n"
+					<< "[ 3 ] Medium (3-4 players)\n"
+					<< "[ 4 ] Large (5-6 players)\n"
+					<< "[ 5 ] Exit" << endl;
+				string input = "";
+				getline(cin, input);
+
+				// This code converts from string to number safely.
+				stringstream myStream(input);
+				int userChoice = 0;
+				if (myStream >> userChoice) {
+					int check = mapCreator(userChoice);
+					if (check == 500)
+						return 500; //if mapCreation returned 500, return to main menu
+				}
+				else
+					cout << "Not a valid choice. Please try again" << endl;
+			}
+			return 0;//shouldn't reach this
+		}
+		case 2: {
+			cout << "=========================\n"
+				<< "Welcome to the Map Editor !\n"
+				<< "=========================\n";
+
+			while (true) {
+				cout << "\nWhich map would you like to edit:\n"
+					<< "[ 1 ] Good\n"
+					<< "[ 2 ] Bad1 (Corrupt File)\n"
+					<< "[ 3 ] Bad2 (Continents Invalid)\n"
+					<< "[ 4 ] Bad3 (Disconnected Map)\n"
+					<< "[ 5 ] Exit" << endl;
+				string input = "";
+				getline(cin, input);
+
+				// This code converts from string to number safely.
+				stringstream myStream(input);
+				int userChoice = 0;
+				if (myStream >> userChoice) {
+					int check = mapEditor(userChoice);
+					if (check == 500)
+						return 500; //if mapCreation returned 500, return to main menu
+				}
+				else
+					cout << "Not a valid choice. Please try again" << endl;
+			}
+			return 0;//shouldn't reach this
+		}
+
+		case 3: { return 500; }//return to main menu
+		}
+		return 0; // should not get here
+	}
+
+	static void mainMapMenu() {
+		cout <<"=============================\n"
+			<< "Welcome to the Main Map Menu!\n"
+			<< "=============================\n";
+
+		while (true) {
+			cout << "\nWould you like to:\n"
+				<< "[ 1 ] Create new map?\n"
+				<< "[ 2 ] Edit existing map?\n"
+				<< "[ 3 ] Exit" << endl;
+			string input = "";
+			getline(cin, input);
+
+			// This code converts from string to number safely.
+			stringstream myStream(input);
+			int userChoice = 0;
+			if (myStream >> userChoice) {
+				int check = mapAction(userChoice);
+				if (check == 500)
+					return; //if userAction returned 5, return to main menu
+			}
+			else
+				cout << "Not a valid choice. Please try again" << endl;
 		}
 	}
+
 }
 
 using namespace mapDemo;
 
-
-int main() {
-	
-	welcome();
-
-	while (true) {
-		cout << "\nWould you like to:\n"
-			<< "[ 1 ] Test creating a country?\n"
-			<< "[ 2 ] Test creating a continent?\n"
-			<< "[ 3 ] Test creating a map?\n"
-			<< "[ 4 ] Exit" << endl;
-		string input = "";
-		getline(cin, input);
-
-		// This code converts from string to number safely.
-		stringstream myStream(input);
-		int userChoice = 0;
-		if (myStream >> userChoice)
-			userAction(userChoice);
-		else
-			cout << "Not a valid choice. Please try again" << endl;
-	}
+int  main() {
+	mainMapMenu();
 }
 

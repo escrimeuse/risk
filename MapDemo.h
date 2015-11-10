@@ -28,9 +28,12 @@ public:
 	static const int DEMO_MAP_NUM_CONT_COUNTRIES = 2;//number of countries per continent
 	MapDemo(string n);
 	void makeAdjacent(string c1, string c2);//updates the adjacency matrices
+	void makeNotAdjacent(string c1, string c2);//updates the adjacency matrices
 	void printAdjacentCountryNames(string n);
 	void printContinentsCountries(int n);
-	void demoMap();//function specifically for the demo, used to set up the map
+	void demoMap1();//function specifically for the demo, used to set up the map
+	void demoMap2();//function specifically for the demo, used to set up the map
+	void demoMap3();//function specifically for the demo, used to set up the map
 
 
 private:

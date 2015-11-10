@@ -91,6 +91,40 @@ string Map::getType() {
 	return type;
 }
 
+Continent* Map::getContinentByName(string n) {
+	bool exists = false;
+	//making sure that the string is a valid country name
+	for (int i = 0; i < Map::getNumContinents(); i++) {
+		if (((*Map::getContinents())[i]->getName()) == n) {
+			return (*Map::getContinents())[i];
+		}
+		else {
+			cout << "No such continent could be found." << endl;
+			return NULL;
+		}
+	}
+	return NULL;
+}
+
+Country* Map::getCountryByName(string n) {
+	bool exists = false;
+	//making sure that the string is a valid country name
+	for (int i = 0; i < Map::getNumCountries(); i++) {
+		if (((*Map::getCountries())[i]->getName()) == n) {
+			return (*Map::getCountries())[i];
+		}
+		else {
+			cout << "No such country could be found." << endl;
+			return NULL;
+		}
+	}
+	return NULL;
+}
+
+void Map::setName(string n) {
+	name = n;
+}
+
 void Map::setType(string s) {
 	type = s;
 }
@@ -148,4 +182,12 @@ void Map::addCountry(Country* c) {
 void Map::printContinentsCountries(int n) {
 	cout << "The following countries belong to " << (*continents)[n - 1]->getName() << ": ";
 	cout << (*continents)[n - 1]->getCountryNames() << " "<< endl;
+}
+
+void Map::setAdjacency(bool** matrix) {
+	for (int i = 0; i < 9; ++i) {
+		for (int j = 0; j < 9; ++j) {
+			countriesAdj[i][j] = matrix[i][j];
+		}
+	}
 }

@@ -4,6 +4,7 @@
 //This is the implementation file Country.cpp for the class Country.
 //The interface for the class Country is in the header file Country.h.
 
+#include "Player.h"
 #include<string>
 using namespace std;
 
@@ -13,17 +14,25 @@ int Country::countryCount=0;
 
 Country::Country() {
 	id = ++countryCount;
-	owner = "none";
+	owner = NULL;
 	isOwned = false;
 	armies = 0;
 }
 
+Country::Country(string aname, int aid, int aarmies, bool aowned, Player* o) {
+	name = aname;
+	id = aid;
+	armies = aarmies;
+	isOwned = aowned;
+	owner = o;
+	++countryCount;
+}
 //accessors used to be inline, but it caused a problem with the linker.
 string Country::getName() const {
 	return name;
 }
 
-string Country::getOwner() const {
+Player* Country::getOwner() const {
 	return owner;
 }
 
@@ -47,7 +56,7 @@ void Country::setName(string n) {
 	name = n;
 }
 
-void Country::setOwner(string o) {
+void Country::setOwner(Player* o) {
 	owner = o;
 	setIsOwned(true);
 }

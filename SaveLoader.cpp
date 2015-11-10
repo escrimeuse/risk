@@ -7,6 +7,7 @@
 
 #include "SaveLoader.h"
 #include "Map.h"
+#include "MapDemo.h"
 #include "Country.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ using namespace std;
 const string SaverLoader::extension = ".map";
 
 /**
-* Default Constructior
+* Default Constructor
 * Name the file unnamed.map
 */
 SaverLoader::SaverLoader() {			//Initialize fileName to unnamed.map
@@ -66,9 +67,8 @@ void SaverLoader::save(Map *map) {
 * @param map map to be saved
 */
 void SaverLoader::saveMap(ofstream& out, Map *map) {
-	out << "["<<map->getType() <<"]"<< endl;
-	//out << "Last save: " << getTime() << endl;
-	out << "Last save: " << endl;
+	out << map->getType() << endl;
+
 	out << map->getName() << "\n\n";
 }
 
@@ -78,12 +78,12 @@ void SaverLoader::saveMap(ofstream& out, Map *map) {
 * @param map map whose countries will be saved
 */
 void SaverLoader::saveCountries(ofstream& out, Map *map) {
-	out << "[COUNTRIES]" << endl;
+
 	out << map->getNumCountries() << endl;
 	for (int i = 0; i < map->getNumCountries(); i++) {			// For each country
 		Country *current = (* map->getCountries())[i];
-		out <<current->getId() << "/" << current->getName() // saves id/name/owner/troops
-			<< "/" << current->getOwner() << "/" << current->getArmies() << endl;
+		out <<current->getId() << " " << current->getName() // saves id/name/owner/troops
+			<< " " << current->getOwner() << " " << current->getArmies() << endl;
 	}
 	out << "\n";
 }
@@ -94,11 +94,11 @@ void SaverLoader::saveCountries(ofstream& out, Map *map) {
 * @param map map whose continents will be saved
 */
 void SaverLoader::saveContinents(ofstream& out, Map *map) {
-	out << "[CONTINENTS]" << endl;
+
 	out << map->getNumContinents() << endl;
 	for (int i = 0; i < map->getNumContinents(); i++) {	// for each continent in the map
 		Continent *current = (*map->getContinents())[i];
-		out << current->getName() << "/" << current->getNumCountries() << endl; // Continent info
+		out << current->getName() << " " << current->getNumCountries() << endl; // Continent info
 		for (int j = 0; j <current->getNumCountries(); j++) {	// Each country inside continent
 			Country *currentJ =(* current->getCountries())[j];
 			out << currentJ->getId() << endl;			// save country id
@@ -125,25 +125,266 @@ void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
 		out << "\n\n";
 	}
 }
+//void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
+//	
+//
+//	for (int i = 0; i < map->getNumCountries(); i++)		// x axis of the
+//	{
+//		Country *current = (*map->getCountries())[i];
+//		out << current->getId() << "\t" << current->getName() << endl;	// current country info
+//		for (int j = 0; j < map->getNumCountries(); j++)		// y axis
+//		{
+//			out << map->checkIsAdjacentByIndex(i,j) << "\t";		// save true or false connection
+//		}
+//		out << "\n\n";
+//	}
+//}
 //
 //
 ///**
-//* loads a map
-//* @return pointer to loaded map
-//*/
-//Map* SaverLoader::load() {
-//	ifstream in(fileName.c_str());		//opens file for reading
-//	char s[256];
-//	in.getline(s, 256, '\n');
-//	if()
-//	Map *map = new Map;					// new map object
-//	loadMap(in, map);					// load map info
-//	loadCountries(in, map);				// load countries
-//	loadContinents(in, map);			// load continents
-//	loadAdjacencies(in, map);			// load adjencencies
-//	in.close();							// close file
-//	return map;							// return pointer
-//}
+/* loads a map
+* @return pointer to loaded map
+*/
+Map* SaverLoader::load() {
+
+	struct CountryL {
+		string name;
+		string owner;
+		int id;
+		int numArmies;
+		bool* adjacencies;
+	};
+
+	struct ContinentL {
+		string name;
+		int id;
+		int numCountries;
+		int* countryIds;
+		int controlValue;
+	};
+
+	string mapType = "";
+	string mapName = "";
+	int numberCountries = -1;
+	int numberContinents = -1;
+	vector<CountryL*>* countryList = new vector<CountryL*>;
+	vector<ContinentL*>* continentList = new vector<ContinentL*>;
+
+	ifstream fin;
+	//fin.open(fileName + "." + extension);
+	fin.open("TestMap.map");
+	try {
+
+		// first read in the map type
+		fin >> mapType;
+		if (fin.fail()) {
+			throw 20;
+		}
+		cout << mapType << endl;
+
+		// now read in the map name
+		fin >> mapName;
+		if (fin.fail()) {
+			throw 20;
+		}
+		cout << mapName << endl;
+
+		// read in the number of countries
+		fin >> numberCountries;
+		if (fin.fail()) {
+			throw 20;
+		}
+		cout << numberCountries << endl;
+
+		
+		for (int i = 0; i < numberCountries; ++i) {
+			CountryL* newCountry = new CountryL();
+
+			fin >> newCountry->id;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newCountry->id << " ";
+
+			fin >> newCountry->name;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newCountry->name << " ";
+
+			fin >> newCountry->owner;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newCountry->owner << " ";
+
+			fin >> newCountry->numArmies;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newCountry->numArmies << " ";
+			cout << endl;
+
+			countryList->push_back(newCountry);
+		}
+
+		// check the list to see if we have any countries with the same ID number. Since an ID is unique to a country, 
+		// we should not have any duplicate/matching ID numbers in a valid map
+		for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i) {
+			int countryID = (*i)->id;
+
+			for (vector<CountryL*>::iterator j = countryList->begin(); j != countryList->end(); ++j) {
+				if ((*j)->id == countryID) {
+					throw 20;
+				}
+			}
+		}
+
+		// read in the number of continents
+		fin >> numberContinents;
+		if (fin.fail()) {
+			throw 20;
+		}
+		cout << numberContinents << endl;
+
+		
+
+		for (int i = 0; i < numberContinents; ++i) {
+			ContinentL* newContinent = new ContinentL();
+			
+			fin >> newContinent->id;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newContinent->id << " ";
+
+			fin >> newContinent->name;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newContinent->name << " ";
+
+			fin >> newContinent->numCountries;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newContinent->numCountries << " ";
+
+			fin >> newContinent->controlValue;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << newContinent->controlValue << " ";
+
+			newContinent->countryIds = new int[newContinent->numCountries];
+
+			for (int i = 0; i < newContinent->numCountries; ++i) {
+				fin >> (newContinent->countryIds)[i];
+				if (fin.fail()) {
+					throw 20;
+				}
+				cout << (newContinent->countryIds)[i] << endl;
+			}
+
+			continentList->push_back(newContinent);
+		}
+
+		// now read in the adjacencies of each country
+		int tempCountryId = -1;
+		for (int i = 0; i < numberCountries; ++i) {
+			fin >> tempCountryId;
+			if (fin.fail()) {
+				throw 20;
+			}
+			cout << tempCountryId << endl;
+			CountryL* country = NULL;
+
+			// search country list to find the country corresponding to this ID
+			for (vector<CountryL*>::iterator j = countryList->begin(); j != countryList->end(); ++j) {
+				if ((*j)->id == tempCountryId) {
+					country = *j;
+					break;
+				}
+			}
+			if (country == NULL) {
+				// if the country is NULL, then that means that the country ID read in from the file does not correspond to a
+				// country ID that was previously read in from the file.
+				throw 20;
+			}
+
+			country->adjacencies = new bool[numberCountries];
+
+			for (int k = 0; k < numberCountries; ++k) {
+				fin >> (country->adjacencies)[k];
+				if (fin.fail()) {
+					throw 20;
+				}
+				cout << (country->adjacencies)[k] << " ";
+			}
+			cout << endl;
+		}
+
+		bool** adjacencyMatrix = new bool*[numberCountries];
+		int j = 0;
+		for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i, ++j) {
+			adjacencyMatrix[j] = (*i)->adjacencies;
+		}
+		
+
+
+
+
+	}
+	catch (...) {
+		cout << "ERROR:" << endl;
+		cout << "The map file you are trying to load has been corrupted!" << endl;
+		cout << "It is to RISKy to load it >:-|" << endl;
+		return NULL;
+	}
+
+	
+
+	Map* loadedMap = new MapDemo(mapName);
+
+
+	// now we add the continents
+	for (vector<ContinentL*>::iterator j = continentList->begin(); j != continentList->end(); ++j) {
+		Continent* temp = new Continent((*j)->name, (*j)->numCountries, (*j)->id, (*j)->controlValue);
+
+		// now we add countries to the continent
+		for (int i = 0; i < (*j)->numCountries; ++i) {
+			int tempIDholder = (*j)->countryIds[i];
+			for (vector<CountryL*>::iterator k = countryList->begin(); k != countryList->end(); ++k) {
+				if ((*k)->id == tempIDholder) {
+					Country* tempCountry = new Country((*k)->name, (*k)->id, (*k)->numArmies, false, NULL);
+					loadedMap->addCountry(tempCountry);
+					temp->addCountry(tempCountry);
+				}
+				
+			}
+		}
+		loadedMap->addContinent(temp);
+	}
+
+	// now we create the adjacency matrix for the countries
+
+	bool** adjMatrix = new bool*[9];
+
+	int j = 0;
+	for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i,++j) {
+		for (int k = 0; k < 9; ++k) {
+			adjMatrix[j] = new bool[j];
+			adjMatrix[j][k] = (*i)->adjacencies[k];
+		}
+	}
+
+	// pass the adjacency matrix so it can be copied to the adjacency matrix in the map
+	loadedMap->setAdjacency(adjMatrix);
+
+	fin.close();
+	return loadedMap;
+
+}
 ///**
 //* loads a map info
 //* @param in input stream with opened file
@@ -238,3 +479,4 @@ void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
 //		in.getline(s, 256, '\n');
 //	}
 //}
+
