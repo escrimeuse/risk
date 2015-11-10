@@ -19,6 +19,15 @@ Country::Country() {
 	armies = 0;
 }
 
+Country::Country(string aname, int aid, int aarmies, bool aowned, Player* o) {
+	name = aname;
+	id = aid;
+	armies = aarmies;
+	isOwned = aowned;
+	owner = o;
+	++countryCount;
+}
+
 //accessors used to be inline, but it caused a problem with the linker.
 string Country::getName() const {
 	return name;

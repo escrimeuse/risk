@@ -298,3 +298,11 @@ void Map::demoMap() {
 	printAdjacentCountryNamesById(9);
 	
 }
+
+void Map::setAdjacency(bool** matrix) {
+	for (int i = 0; i < 9; ++i) {
+		for (int j = 0; j < 9; ++j) {
+			countriesAdj[i][j] = matrix[i][j];
+		}
+	}
+}

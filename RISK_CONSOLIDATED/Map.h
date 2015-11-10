@@ -33,7 +33,9 @@ public:
 	void printAdjacentCountryNames(string n);
 	void printContinentsCountries(int n);
 	void demoMap();//function specifically for the demo, used to set up the map
-	
+	void addContinent(Continent* c);
+	void addCountry(Country* c);
+	void setAdjacency(bool** matrix);
 	
 private:
 	string name;
@@ -42,8 +44,6 @@ private:
 	int visited[9];//9 because there are 9 countries
 	vector<Continent*> *continents;
 	vector<Country*> *countries;
-	void addContinent(Continent* c);
-	void addCountry(Country* c);
 	bool countriesAdj[9][9]; 
 	bool isConnected; 
 	bool ContinentsValid;// do the continents contain connected countries?

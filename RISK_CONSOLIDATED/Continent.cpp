@@ -15,12 +15,20 @@ int Continent::continentCount = 0;
 
 Continent::Continent() {
 	id = ++continentCount;
-	owner = "";
+	owner = NULL;
 	isOwned = false;
 	countries = new vector<Country*>;
 	numCountries = 0;
 	controlValue = (rand() % 10) + 1;
-	cout << "Control value is " << controlValue << endl;
+}
+
+Continent::Continent(string aname, int numC, int aid, int acontrolValue) {
+	id = aid;
+	owner = NULL;
+	isOwned = false;
+	countries = new vector<Country*>;
+	numCountries = numC;
+	controlValue = acontrolValue;
 }
 
 //accessors used to be inline, but it caused a problem with the linker.
@@ -28,7 +36,7 @@ string Continent::getName() const {
 	return name;
 }
 
-string Continent::getOwner() const {
+Player* Continent::getOwner() const {
 	return owner;
 }
 
@@ -61,7 +69,7 @@ void Continent::setName(string n) {
 	name = n;
 }
 
-void Continent::setOwner(string o) {
+void Continent::setOwner(Player* o) {
 	owner = o;
 	setIsOwned(true);
 }

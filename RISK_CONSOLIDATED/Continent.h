@@ -10,19 +10,20 @@
 #include<vector>
 
 using namespace std;
-
+#include "Player.h"
 #include "Country.h"
 
 class Continent {
 public:
 	Continent(); //  id is set automatically with static int continentCount
+	Continent(string aname, int numC, int id, int controlValue); 
 	string getName() const;
-	string getOwner() const;
+	Player* getOwner() const;
 	bool getIsOwned() const;
 	int getNumCountries() const;
 	string getCountryNames() const;
 	void setName(string n);
-	void setOwner(string o);
+	void setOwner(Player* o);
 	static int getCount();
 	void addCountry(Country* c);
 	static void resetCount();//this method only exists for demo purposes (to reset the continentCount to 0 when a new menu option is selected)
@@ -35,7 +36,7 @@ private:
 	vector<Country*> *countries;
 	int numCountries;
 	bool isOwned;
-	string owner; //string for now, will be a real Player class later
+	Player* owner; 
 	void setIsOwned(bool o);//set to true in setOwner
 	int controlValue; 
 };

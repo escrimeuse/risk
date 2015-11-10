@@ -14,6 +14,7 @@ using namespace std;
 class Country {
 public:
 	Country(); // id is set automatically with static int countryCount
+	Country(string name, int id, int numArmies, bool owned, Player* owner);
 	string getName() const;
 	Player* getOwner() const;
 	bool getIsOwned() const;
