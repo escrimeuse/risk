@@ -38,6 +38,7 @@ private:
 	int visitedContinent[DEMO_MAP_NUM_CONT_COUNTRIES];//2 
 	bool countriesAdj[DEMO_MAP_NUM_COUNTRIES][DEMO_MAP_NUM_COUNTRIES];//6 by 6
 	bool checkIsAdjacentByIndex(int c1, int c2);//check if c1 and c2 are adjacent via their id
+	bool checkIsAdjacent(Country *c1, Country *c2);
 	bool checkContinentsValid();// do the continents contain connected countries?
 	bool checkIsConnected();// called by getIsConnected
 	void visitingMap(int x);//helper function for checkIsConnected 

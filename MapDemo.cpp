@@ -60,6 +60,10 @@ bool MapDemo::checkIsAdjacentByIndex(int c1, int c2) {
 	return false;
 }
 
+bool MapDemo::checkIsAdjacent(Country *c1, Country *c2) {
+	return checkIsAdjacentByIndex((c1->getId() - 1), (c2->getId() - 1));
+}
+
 bool MapDemo::checkContinentsValid() {
 	
 	for (int i = 0; i < Map::getNumContinents(); i++) {
