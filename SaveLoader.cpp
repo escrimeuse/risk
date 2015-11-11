@@ -67,7 +67,7 @@ void SaverLoader::save(Map *map) {
 * @param map map to be saved
 */
 void SaverLoader::saveMap(ofstream& out, Map *map) {
-	out << map->getType() << endl;
+	//out << map->getType() << endl;
 
 	out << map->getName() << "\n\n";
 }
@@ -96,10 +96,10 @@ void SaverLoader::saveCountries(ofstream& out, Map *map) {
 void SaverLoader::saveContinents(ofstream& out, Map *map) {
 
 	out << map->getNumContinents() << endl;
-	for (int i = 0; i < map->getNumContinents(); i++) {	// for each continent in the map
+	for (int i = 0; i < map->getNumContinents(); ++i) {	// for each continent in the map
 		Continent *current = (*map->getContinents())[i];
 		out << current->getId()<<" "<< current->getName() << " " << current->getNumCountries() << " "<< current->getControlValue()<<endl; // Continent info
-		for (int j = 0; j <current->getNumCountries(); j++) {	// Each country inside continentload
+		for (int j = 0; j <current->getNumCountries(); ++j) {	// Each country inside continentload
 			Country *currentJ =(* current->getCountries())[j];
 			out << currentJ->getId() << endl;			// save country id
 		}
@@ -163,7 +163,7 @@ Map* SaverLoader::load() {
 		int controlValue;
 	};
 
-	string mapType = "";
+	//string mapType = "";
 	string mapName = "";
 	int numberCountries = -1;
 	int numberContinents = -1;
@@ -171,16 +171,16 @@ Map* SaverLoader::load() {
 	vector<ContinentL*>* continentList = new vector<ContinentL*>;
 
 	ifstream fin;
-	//fin.open(fileName + "." + extension);
-	fin.open("TestMap.map");
+
+	fin.open(fileName);
 	try {
 
 		// first read in the map type
-		fin >> mapType;
-		if (fin.fail()) {
+		//fin >> mapType;
+		/*if (fin.fail()) {
 			throw 20;
 		}
-		cout << mapType << endl;
+		cout << mapType << endl;*/
 
 		// now read in the map name
 		fin >> mapName;
@@ -356,7 +356,7 @@ Map* SaverLoader::load() {
 	
 	
 
-	Map* loadedMap = new MapDemo(mapName);
+	Map* loadedMap = new MapDemo(mapName,numberCountries,numberContinents);
 
 	// now we add the continents
 	for (vector<ContinentL*>::iterator j = continentList->begin(); j != continentList->end(); ++j) {
@@ -379,21 +379,33 @@ Map* SaverLoader::load() {
 
 	// now we create the adjacency matrix for the countries
 
-	bool** adjMatrix = new bool*[6];
+	bool** adjMatrix;
+	adjMatrix = new bool*[6];
+	for (int i = 0; i < 6; i++) {
+		adjMatrix[i] = new bool[6];
+	}
 
 	int j = 0;
-	for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i,++j) {
+	for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i, ++j) {
 		for (int k = 0; k < 6; ++k) {
-			adjMatrix[j] = new bool[j];
 			adjMatrix[j][k] = (*i)->adjacencies[k];
 		}
+
 	}
 
 	// pass the adjacency matrix so it can be copied to the adjacency matrix in the map
 	loadedMap->setAdjacency(adjMatrix);
 
+
+	bool valid = loadedMap->getIsConnected();
+	bool connected = loadedMap->getContinentsValid();
+
 	fin.close();
-	return loadedMap;
+
+	if (valid && connected) {
+		return loadedMap;
+	}
+	return NULL;
 
 }
 ///**

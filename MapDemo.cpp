@@ -16,6 +16,11 @@ using namespace std;
 
 
 //Constructor makes demo map with 6 countries and 3 continents
+MapDemo::MapDemo(string aname, int country, int continent): Map(aname,country,continent) {
+	
+}
+
+
 MapDemo::MapDemo(string n): Map(n, DEMO_MAP_NUM_COUNTRIES, DEMO_MAP_NUM_CONTINENTS){
 	//type
 	setType("MAPDEMO");

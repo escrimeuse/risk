@@ -21,9 +21,8 @@ Country::Country() {
 	armies = 0;
 }
 
-Country::Country(string aname, int aid, int aarmies, bool aowned, Player* o) {
+Country::Country(string aname, int aid, int aarmies, bool aowned, Player* o):name(aname) {
 	cout << "Non-Default country constructor\n";
-	name = aname;
 	id = aid;
 	armies = aarmies;
 	isOwned = aowned;

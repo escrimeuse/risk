@@ -27,6 +27,7 @@ public:
 	static const int DEMO_MAP_NUM_CONTINENTS = 3;//number of continents in the map
 	static const int DEMO_MAP_NUM_CONT_COUNTRIES = 2;//number of countries per continent
 	MapDemo(string n);
+	MapDemo(string aname,int country, int continent);
 	void makeAdjacent(string c1, string c2);//updates the adjacency matrices
 	void makeNotAdjacent(string c1, string c2);//updates the adjacency matrices
 	void printAdjacentCountryNames(string n);
@@ -39,7 +40,7 @@ public:
 private:
 	int visitedMap[DEMO_MAP_NUM_COUNTRIES];//6
 	int visitedContinent[DEMO_MAP_NUM_CONT_COUNTRIES];//2 
-	bool countriesAdj[DEMO_MAP_NUM_COUNTRIES][DEMO_MAP_NUM_COUNTRIES];//6 by 6
+	//bool countriesAdj[DEMO_MAP_NUM_COUNTRIES][DEMO_MAP_NUM_COUNTRIES];//6 by 6
 	bool checkIsAdjacentByIndex(int c1, int c2);//check if c1 and c2 are adjacent via their id
 	bool checkIsAdjacent(Country *c1, Country *c2);
 	bool checkContinentsValid();// do the continents contain connected countries?
@@ -47,6 +48,7 @@ private:
 	void visitingMap(int x);//helper function for checkIsConnected 
 	void visitingContinent(int x, bool b[][DEMO_MAP_NUM_CONT_COUNTRIES]);//helper function for checkContinentsValid
 	void printAdjacentCountryNamesById(int n);//mainly for use in the demo
+
 	
 };
 

@@ -23,10 +23,9 @@ Continent::Continent() {
 	controlValue = (rand() % 10) + 1;
 }
 
-Continent::Continent(string aname, int numC, int aid, int acontrolValue) {
+Continent::Continent(string aname, int numC, int aid, int acontrolValue):name(aname) {
 	cout << "Non-Default continent constructor\n";
 	id = aid;
-	name = aname;
 	owner = NULL;
 	isOwned = false;
 	countries = new vector<Country*>;
@@ -96,7 +95,6 @@ void Continent::setIsOwned(bool o) {
 //Note that the concept of countries being members of only one continent takes place is shown in the Map class.
 void Continent::addCountry(Country* c) {
 	countries->push_back(c);
-	numCountries++;
 }
 
 int Continent::getControlValue() {

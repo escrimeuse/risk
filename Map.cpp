@@ -94,15 +94,15 @@ string Map::getType() {
 Continent* Map::getContinentByName(string n) {
 	bool exists = false;
 	//making sure that the string is a valid country name
-	for (int i = 0; i < Map::getNumContinents(); i++) {
-		if (((*Map::getContinents())[i]->getName()) == n) {
+	for (int i = 0; i < Map::getNumContinents(); ++i) {
+		cout << (*Map::getContinents())[i]->getName() << endl;
+		if (((*Map::getContinents())[i]->getName()).compare(n)==0) {
 			return (*Map::getContinents())[i];
 		}
-		else {
-			cout << "No such continent could be found." << endl;
-			return NULL;
-		}
 	}
+
+		cout << "No such continent could be found." << endl;
+		
 	return NULL;
 }
 
@@ -113,11 +113,8 @@ Country* Map::getCountryByName(string n) {
 		if (((*Map::getCountries())[i]->getName()) == n) {
 			return (*Map::getCountries())[i];
 		}
-		else {
-			cout << "No such country could be found." << endl;
-			return NULL;
-		}
 	}
+	cout << "No such country could be found." << endl;
 	return NULL;
 }
 

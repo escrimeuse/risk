@@ -123,17 +123,18 @@ namespace mapDemo {
 				<< "Which continent's name do you want to change?: ";
 				string toChange = "";
 				string changeTo = "";
-				getline(cin, toChange);
+				cin >> toChange;
 				cout << "What do you want to change it to?: ";
-				getline(cin, changeTo);
+				cin >> changeTo;
 				Continent *target = m->getContinentByName(toChange);
 				if (target != NULL) {
 					target->setName(changeTo);
 					cout << "Continent name is " << target->getName()<<".\n";
 				}
 				else {
-					cout << toChange << " is not a valid country name. \n";
+					cout << toChange << " is not a valid continent name. \n";
 				}				
+				return 0;
 			}
 			case 3: {cout << "COUNTRIES: " << m->getCountryNames() << "\n"
 				<< "Which country's name do you want to change?: ";
@@ -149,10 +150,34 @@ namespace mapDemo {
 				}
 				else {
 					cout << toChange << " is not a valid country name. \n";
-				}
+				} 
+				return 0;
 			}
-			case 4: case 5: {cout << "SOON!..." << endl;
-				return 0; }
+			case 4: {
+				//allow user to create adjacency
+				cout << "\nWhich two countries would you like to make adjacent?\n"
+					<< "First country: ";
+				string c1, c2;
+				cin >> c1;
+				cout << "Second country: ";
+				cin >> c2;
+				m->makeAdjacent(c1, c2);
+				m->printAdjacentCountryNames(c1);
+				m->printAdjacentCountryNames(c2);
+				return 0;
+			}
+			case 5: {//allow user to make two countries NOT adjacent
+				cout << "\nWhich two countries would you like to make NOT adjacent?\n"
+					<< "First country: ";
+				string c1, c2;
+				cin >> c1;
+				cout << "Second country: ";
+				cin >> c2;
+				m->makeNotAdjacent(c1, c2);
+				m->printAdjacentCountryNames(c1);
+				m->printAdjacentCountryNames(c2);
+				return 0; 
+			}
 			case 6: { return 500; }//return to main menu
 		}
 		return 0;
@@ -218,6 +243,10 @@ namespace mapDemo {
 				Map *m = s->load();
 				if (m != NULL) {
 					editMap(m);
+					if (m->getIsConnected() && m->getContinentsValid())
+						s->save(m);
+					else
+						cout << "Map not valid. Cannot save map." << endl;
 					return 0;
 				}
 				else {
@@ -228,17 +257,54 @@ namespace mapDemo {
 			}
 			case 2: {//Edit bad1 map
 				cout << "Attempting to load map...";
-				//should be rejected
-				return 0;
+				SaverLoader *s = new SaverLoader("MyBadMap1");
+				Map *m = s->load();
+				if (m != NULL) {
+					editMap(m);
+					if (m->getIsConnected() && m->getContinentsValid())
+						s->save(m);
+					else
+						cout << "Map not valid. Cannot save map." << endl;
+					return 0;
+				}
+				else {
+					cout << "Invalid map! SHAME!" << endl;
+					return 0;
+				}
 			}
 			case 3: {//Edit bad2 map
 				cout << "Attempting to load map...";
-				//should be rejected
-				return 0;
+				SaverLoader *s = new SaverLoader("BadMap2");
+				Map *m = s->load();
+				if (m != NULL) {
+					editMap(m);
+					if (m->getIsConnected() && m->getContinentsValid())
+						s->save(m);
+					else
+						cout << "Map not valid. Cannot save map." << endl;
+					return 0;
+				}
+				else {
+					cout << "Invalid map! SHAME!" << endl;
+					return 0;
+				}
 			}
 			case 4: {//Edit bad3 map
 				cout << "Attempting to load map...";
-				//should be rejected
+				SaverLoader *s = new SaverLoader("BadMap3");
+				Map *m = s->load();
+				if (m != NULL) {
+					editMap(m);
+					if (m->getIsConnected() && m->getContinentsValid())
+						s->save(m);
+					else
+						cout << "Map not valid. Cannot save map." << endl;
+					return 0;
+				}
+				else {
+					cout << "Invalid map! SHAME!" << endl;
+					return 0;
+				}
 				return 0;
 			}
 			case 5: { return 500; }//return to main menu

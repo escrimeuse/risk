@@ -52,10 +52,12 @@ public:
 	virtual void printAdjacentCountryNamesById(int n) = 0;//mainly for use in the demo
 
 	virtual void makeAdjacent(string c1, string c2) = 0;//updates the adjacency matrices
+	virtual void makeNotAdjacent(string c1, string c2) = 0;//updates the adjacency matrices
 	virtual bool checkIsAdjacentByIndex(int c1, int c2) = 0;//check if c1 and c2 are adjacent via their id
 	virtual bool checkIsConnected() = 0;// called by getIsConnected
 	virtual bool checkContinentsValid() = 0;// called by getContinentsValid
 	virtual void visitingMap(int x) = 0;//helper function for checkIsConnected
+	bool countriesAdj[6][6];
 
 private:
 	string name;
@@ -66,7 +68,7 @@ private:
 	vector<Country*> *countries;
 	bool isConnected;
 	bool continentsValid;// do the continents contain connected countries?
-	bool countriesAdj[9][9];
+	
 	
 };
 
