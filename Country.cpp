@@ -6,6 +6,7 @@
 
 #include "Player.h"
 #include<string>
+#include<iostream>
 using namespace std;
 
 #include "Country.h"
@@ -13,6 +14,7 @@ using namespace std;
 int Country::countryCount=0;
 
 Country::Country() {
+	cout << "Non-Default country constructor\n";
 	id = ++countryCount;
 	owner = NULL;
 	isOwned = false;
@@ -20,6 +22,7 @@ Country::Country() {
 }
 
 Country::Country(string aname, int aid, int aarmies, bool aowned, Player* o) {
+	cout << "Non-Default country constructor\n";
 	name = aname;
 	id = aid;
 	armies = aarmies;

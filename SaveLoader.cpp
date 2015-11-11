@@ -98,8 +98,8 @@ void SaverLoader::saveContinents(ofstream& out, Map *map) {
 	out << map->getNumContinents() << endl;
 	for (int i = 0; i < map->getNumContinents(); i++) {	// for each continent in the map
 		Continent *current = (*map->getContinents())[i];
-		out << current->getName() << " " << current->getNumCountries() << endl; // Continent info
-		for (int j = 0; j <current->getNumCountries(); j++) {	// Each country inside continent
+		out << current->getId()<<" "<< current->getName() << " " << current->getNumCountries() << " "<< current->getControlValue()<<endl; // Continent info
+		for (int j = 0; j <current->getNumCountries(); j++) {	// Each country inside continentload
 			Country *currentJ =(* current->getCountries())[j];
 			out << currentJ->getId() << endl;			// save country id
 		}
@@ -112,22 +112,8 @@ void SaverLoader::saveContinents(ofstream& out, Map *map) {
 * @param out Stream with opened file
 * @param map map with adjencecies
 */
-void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
-	out << "[ADJENCENCIES]" << endl;
-	for (int i = 0; i < map->getNumCountries(); i++)		// x axis of the
-	{
-		Country *current = (*map->getCountries())[i];
-		out << current->getId() << "\t" << current->getName() << endl;	// current country info
-		for (int j = 0; j < map->getNumCountries(); j++)		// y axis
-		{
-			out << map->checkIsAdjacentByIndex(i,j) << "\t";		// save true or false connection
-		}
-		out << "\n\n";
-	}
-}
 //void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
-//	
-//
+//	out << "[ADJENCENCIES]" << endl;
 //	for (int i = 0; i < map->getNumCountries(); i++)		// x axis of the
 //	{
 //		Country *current = (*map->getCountries())[i];
@@ -139,8 +125,22 @@ void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
 //		out << "\n\n";
 //	}
 //}
-//
-//
+void SaverLoader::saveAdjencencies(ofstream& out, Map *map) {
+	
+
+	for (int i = 0; i < map->getNumCountries(); i++)		// x axis of the
+	{
+		Country *current = (*map->getCountries())[i];
+		out << current->getId() <<  endl;	// current country info
+		for (int j = 0; j < map->getNumCountries(); j++)		// y axis
+		{
+			out << map->checkIsAdjacentByIndex(i,j) << "\t";		// save true or false connection
+		}
+		out << "\n\n";
+	}
+}
+
+
 ///**
 /* loads a map
 * @return pointer to loaded map
@@ -230,11 +230,11 @@ Map* SaverLoader::load() {
 
 		// check the list to see if we have any countries with the same ID number. Since an ID is unique to a country, 
 		// we should not have any duplicate/matching ID numbers in a valid map
-		for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i) {
-			int countryID = (*i)->id;
+		for (int i=0; i < numberCountries; ++i) {
+			int countryID = ((*countryList)[i])->id;
 
-			for (vector<CountryL*>::iterator j = countryList->begin(); j != countryList->end(); ++j) {
-				if ((*j)->id == countryID) {
+			for (int j = i + 1; j < numberCountries;++j) {
+				if (((*countryList)[j]->id == countryID)) {
 					throw 20;
 				}
 			}
@@ -289,6 +289,18 @@ Map* SaverLoader::load() {
 			continentList->push_back(newContinent);
 		}
 
+		// check the list to see if we have any continents with the same ID number. Since an ID is unique to a continent, 
+		// we should not have any duplicate/matching ID numbers in a valid map
+		for (int i = 0; i < numberContinents; ++i) {
+			int continentID = ((*continentList)[i])->id;
+
+			for (int j = i + 1; j < numberContinents; ++j) {
+				if (((*continentList)[j]->id == continentID)) {
+					throw 20;
+				}
+			}
+		}
+
 		// now read in the adjacencies of each country
 		int tempCountryId = -1;
 		for (int i = 0; i < numberCountries; ++i) {
@@ -341,16 +353,15 @@ Map* SaverLoader::load() {
 		cout << "It is to RISKy to load it >:-|" << endl;
 		return NULL;
 	}
-
+	
 	
 
 	Map* loadedMap = new MapDemo(mapName);
 
-
 	// now we add the continents
 	for (vector<ContinentL*>::iterator j = continentList->begin(); j != continentList->end(); ++j) {
 		Continent* temp = new Continent((*j)->name, (*j)->numCountries, (*j)->id, (*j)->controlValue);
-
+		
 		// now we add countries to the continent
 		for (int i = 0; i < (*j)->numCountries; ++i) {
 			int tempIDholder = (*j)->countryIds[i];
@@ -368,11 +379,11 @@ Map* SaverLoader::load() {
 
 	// now we create the adjacency matrix for the countries
 
-	bool** adjMatrix = new bool*[9];
+	bool** adjMatrix = new bool*[6];
 
 	int j = 0;
 	for (vector<CountryL*>::iterator i = countryList->begin(); i != countryList->end(); ++i,++j) {
-		for (int k = 0; k < 9; ++k) {
+		for (int k = 0; k < 6; ++k) {
 			adjMatrix[j] = new bool[j];
 			adjMatrix[j][k] = (*i)->adjacencies[k];
 		}

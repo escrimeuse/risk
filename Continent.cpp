@@ -14,6 +14,7 @@ using namespace std;
 int Continent::continentCount = 0;
 
 Continent::Continent() {
+	cout << "Default continent constructor\n";
 	id = ++continentCount;
 	owner = NULL;
 	isOwned = false;
@@ -23,7 +24,9 @@ Continent::Continent() {
 }
 
 Continent::Continent(string aname, int numC, int aid, int acontrolValue) {
+	cout << "Non-Default continent constructor\n";
 	id = aid;
+	name = aname;
 	owner = NULL;
 	isOwned = false;
 	countries = new vector<Country*>;
@@ -40,6 +43,9 @@ string Continent::getName() const {
 	return name;
 }
 
+int Continent::getId() const {
+	return id;
+}
 Player* Continent::getOwner() const {
 	return owner;
 }

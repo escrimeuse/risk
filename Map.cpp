@@ -185,8 +185,8 @@ void Map::printContinentsCountries(int n) {
 }
 
 void Map::setAdjacency(bool** matrix) {
-	for (int i = 0; i < 9; ++i) {
-		for (int j = 0; j < 9; ++j) {
+	for (int i = 0; i < 6; ++i) {
+		for (int j = 0; j < 6; ++j) {
 			countriesAdj[i][j] = matrix[i][j];
 		}
 	}

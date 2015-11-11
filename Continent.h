@@ -20,6 +20,7 @@ public:
 	Continent(string aname, int numC, int id, int controlValue); 
 	~Continent();
 	string getName() const;
+	int getId() const;
 	Player* getOwner() const;
 	bool getIsOwned() const;
 	int getNumCountries() const;
