@@ -482,17 +482,18 @@ int main() {
 
 			char doPlayerTurns = 'Y';
 
-			while (doPlayerTurns=='Y') {
+			while (doPlayerTurns=='Y' || doPlayerTurns=='y') {
 
 				for (vector<Player*>::iterator i = activePlayers.begin(); i != activePlayers.end(); ++i) {
 					(*i)->reinforceCountries();
+					// Fortification
+					Fortification fortification;
+					fortification.fortify((*i), map);
 				}
 
-				// Fortification
-				Fortification fortification;
-				fortification.fortify(activePlayers.at(0), map);
+				
 
-				cout << "Do you want to continue? (Y/N) ";
+				cout << "Do you want to continue? Y/N "; 
 				
 				cin >> doPlayerTurns; 
 			}

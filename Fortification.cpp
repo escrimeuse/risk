@@ -10,7 +10,7 @@ void Fortification::fortify(Player* gamePlayer, Map* map) {
 	cout << gamePlayer->getName() << ": FORTIFY!" << endl;
 
 	string answer;
-	do {
+	/*do {*/
 		cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
 		for (list<Country*>::iterator i = gamePlayer->getOwnedCountries()->begin(); i != gamePlayer->getOwnedCountries()->end(); ++i) {
 			cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
@@ -56,12 +56,12 @@ void Fortification::fortify(Player* gamePlayer, Map* map) {
 				for (list<Country*>::iterator i = gamePlayer->getOwnedCountries()->begin(); i != gamePlayer->getOwnedCountries()->end(); ++i) {
 					cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
 				}
-				system("pause");
+				
 
 			}
 			else {
 				cout << "You can only fortify adjacent countries." << endl;
 			}
 		}
-	} while (true);
+	/*} while (true);*/
 }
