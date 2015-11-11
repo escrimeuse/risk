@@ -478,6 +478,7 @@ int main() {
 
 			cout << "Initial reinforcement Complete" << endl;
 
+			
 
 			char doPlayerTurns = 'Y';
 

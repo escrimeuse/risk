@@ -6,6 +6,9 @@ Fortification::Fortification() {
 }
 
 void Fortification::fortify(Player* gamePlayer, Map* map) {
+	cout << endl;
+	cout << gamePlayer->getName() << ": FORTIFY!" << endl;
+
 	string answer;
 	do {
 		cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;

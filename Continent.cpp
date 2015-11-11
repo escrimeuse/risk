@@ -22,7 +22,6 @@ Continent::Continent(int num) {
 	controlValue = (rand() % 10) + 1;
 }
 Continent::Continent() {
-	cout << "Default continent constructor\n";
 	id = ++continentCount;
 	owner = NULL;
 	isOwned = false;
@@ -32,7 +31,7 @@ Continent::Continent() {
 }
 
 Continent::Continent(string aname, int numC, int aid, int acontrolValue):name(aname) {
-	cout << "Non-Default continent constructor\n";
+
 	id = aid;
 	owner = NULL;
 	isOwned = false;

@@ -403,7 +403,8 @@ void Player::reinforceCountries() {
 
 	// step 1: determine total number of armies
 	// ============================================================================
-
+	cout << endl;
+	cout << getName() << ": REINFORCEMENT" << endl;
 	int totalNumArmies = 0;
 
 	// at the baseline, the number of armies available for reinforcement is equal to the floor of the number of countries owned divided by 3
