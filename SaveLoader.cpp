@@ -519,14 +519,20 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			fin >> playersHeading;
 		}
 
+		// now that we know where the player information is, we'll read in the number of players
 		fin >> numberOfPlayers;
 		if (fin.fail()) {
 			throw 20;
 		}
 		cout << numberOfPlayers << endl;
 
+		// now we're going to do a loop to read the information for each player
 		for (int i = 0; i < numberOfPlayers; ++i) {
+
+			// here is an empty player object
 			Player* newPlayer = new Player();
+
+			// these are temporary holders for information that we will feed to the data members of the player
 			string playerName;
 			int armies;
 			int numArtillery;
@@ -535,6 +541,12 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			int numWild;
 			int numContinents;
 			int numCountries;
+			list<Country*>* countryList = NULL;
+			list<Continent*>* continentList = NULL;
+			list<Card*> *infantryCards = new list<Card*>();	
+			list<Card*> *cavalryCards = new list<Card*>();
+			list<Card*> *artilleryCards = new list<Card*>();
+			list<Card*> *wildCards = new list<Card*>();
 
 			fin >> playerName;
 			if (fin.fail()) {
@@ -583,7 +595,10 @@ vector<Player*>* SaverLoader::loadPlayers() {
 				throw 20;
 			}
 			newPlayer->setNumOwnedCountries(numCountries);
-			list<Continent*>* continentList = NULL;
+			
+			// let's create our owned continents. Right now, we're
+			// going to create continents that ONLY have an ID
+			// number
 			if (numContinents > 0) {
 				continentList = new list<Continent*>();
 				for (int j = 0; j < numContinents; ++j) {
@@ -596,7 +611,10 @@ vector<Player*>* SaverLoader::loadPlayers() {
 				}
 			}
 			newPlayer->setOwnedContinents(continentList);
-			list<Country*>* countryList = NULL;
+			
+			// let's create our owned countries. Right now, we're
+			// going to create countries that ONLY have an ID
+			// number
 			if (numCountries > 0) {
 				countryList = new list<Country*>();
 				for (int j = 0; j < numContinents; ++j) {
@@ -610,8 +628,43 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			}
 			newPlayer->setOwnedCountries(countryList);
 
+			// now let's create our player cards
+			// starting with artillery cards
+
+			for (int a = numArtillery; a < numArtillery; ++a) {
+				string countryOnCard = "";
+				fin >> countryOnCard; 
+				Card* newCard = new Card(countryOnCard, artillery);
+				artilleryCards->push_back(newCard);
+			}
+			newPlayer->setPlayersArtilleryCards(artilleryCards);
+
+			for (int a = numCavalry; a < numCavalry; ++a) {
+				string countryOnCard = "";
+				fin >> countryOnCard;
+				Card* newCard = new Card(countryOnCard, cavalry);
+				cavalryCards->push_back(newCard);
+			}
+			newPlayer->setPlayersCavalryCards(cavalryCards);
+
+			for (int a = numInfantry; a < numInfantry; ++a) {
+				string countryOnCard = "";
+				fin >> countryOnCard;
+				Card* newCard = new Card(countryOnCard, infantry);
+				infantryCards->push_back(newCard);
+			}
+			newPlayer->setPlayersInfantryCards(infantryCards);
+
+			for (int a = numWild; a < numWild; ++a) {
+				string countryOnCard = "";
+				fin >> countryOnCard;
+				Card* newCard = new Card(countryOnCard, wild);
+				infantryCards->push_back(newCard);
+			}
+			newPlayer->setPlayersWildCards(wildCards);
 
 
+			gamePlayers->push_back(newPlayer);
 		}
 
 
@@ -620,4 +673,8 @@ vector<Player*>* SaverLoader::loadPlayers() {
 		cout << "ERROR LOADING PLAYERS" << endl;
 		return NULL;
 	}
+
+	fin.close(); 
+
+	return gamePlayers;
 }
