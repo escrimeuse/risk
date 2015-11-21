@@ -7,11 +7,11 @@ ExistingGameBuilder::ExistingGameBuilder(SaverLoader* gameFile) {
 }
 
 void ExistingGameBuilder::buildMap() {
-	//builtGame->map = saveload->loadMap();
+	builtGame->map = saveload->loadMap();
 }
 
 void ExistingGameBuilder::buildPlayers() {
-	//builtGame->currentPlayer = saveload->loadPlayers();
+	builtGame->gamePlayers = saveload->loadPlayers();
 }
 
 void ExistingGameBuilder::buildState() {
