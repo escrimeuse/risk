@@ -14,6 +14,10 @@ public:
 	vector<Player*>* gamePlayers;
 	Player* currentPlayer;
 	int phase; 
+	list<Card*> *gameInfantryCards;	
+	list<Card*> *gameCavalryCards;	
+	list<Card*> *gameArtilleryCards;	
+	list<Card*> *gameWildCards;
 
 
 };
