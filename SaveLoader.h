@@ -12,6 +12,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "Map.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -23,6 +24,11 @@ public:
 	static const string extension;
 	Map* loadMap();
 	vector<Player*>* loadPlayers();
+	list<Card*>* loadCards(cardType card);
+	string loadCurrentPlayer();
+	int loadCurrentPhase();
+	int loadNumCardSetsTradedIn();
+//	void saveGame(Game* game);
 
 private:
 	string fileName;
@@ -31,6 +37,8 @@ private:
 	void saveCountries(ofstream& out, Map *map);
 	void saveContinents(ofstream& out, Map *map);
 	void saveAdjencencies(ofstream& out, Map *map);
+	void savePlayersAndCards(Game* game);
+	void saveState(Game* game);
 	/*void loadMap(ifstream& in, Map* map);
 	void loadCountries(ifstream& in, Map* map);
 	void loadContinents(ifstream& in, Map* map);

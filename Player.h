@@ -85,18 +85,18 @@ public:
 	int getNumCardsArtillery() {
 		return numCardsArtillery;
 	}
+	int getNumCardsWild() {
+		return numCardsWild;
+	}
 	list<Country*>* getOwnedCountries() const {
 		return ownedCountries;
 	};
 	list<Continent*>* getOwnedContinents() const {
 		return ownedContinents;
 	};
-
 	int getTotalNumArmies() {
 		return armies;
 	};
-	
-
 	bool isActive(){
 		if (numOfOwnedCountries != 0)
 			return true;

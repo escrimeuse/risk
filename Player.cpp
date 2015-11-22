@@ -6,11 +6,11 @@
 
 using namespace std;
 
-int Player::numCardSetsTradedIn = 0;	// initialized to zero at the beginning of the game, as there have not been any card sets traded in yet
 
+int Player::numCardSetsTradedIn = 0;
 
 //Definition of class constructors
-Player::Player() : name(NULL), ownedCountries(new list<Country*>), ownedContinents(new list<Continent*>), numOfOwnedCountries(0), numOfOwnedContinents(0), numCardsArtillery(0), numCardsCavalry(0), numCardsInfantry(0), playersArtilleryCards(new list<Card*>), playersCavalryCards(new list<Card*>), playersInfantryCards(new list<Card*>), playersWildCards(new list<Card*>) {
+Player::Player() : name(""), ownedCountries(new list<Country*>), ownedContinents(new list<Continent*>), numOfOwnedCountries(0), numOfOwnedContinents(0), numCardsArtillery(0), numCardsCavalry(0), numCardsInfantry(0), playersArtilleryCards(new list<Card*>), playersCavalryCards(new list<Card*>), playersInfantryCards(new list<Card*>), playersWildCards(new list<Card*>) {
 
 }
 

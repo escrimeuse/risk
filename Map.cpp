@@ -95,7 +95,6 @@ Continent* Map::getContinentByName(string n) {
 	bool exists = false;
 	//making sure that the string is a valid country name
 	for (int i = 0; i < Map::getNumContinents(); ++i) {
-		cout << (*Map::getContinents())[i]->getName() << endl;
 
 		if (((*Map::getContinents())[i]->getName()).compare(n)==0) {
 			return (*Map::getContinents())[i];

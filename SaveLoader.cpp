@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "MapDemo.h"
 #include "Country.h"
+#include "Game.h"
 
 using namespace std;
 //File extension
@@ -508,7 +509,6 @@ vector<Player*>* SaverLoader::loadPlayers() {
 	vector<Player*>* gamePlayers = new vector<Player*>();
 
 	ifstream fin;
-
 	fin.open(fileName);
 	try {
 
@@ -527,13 +527,13 @@ vector<Player*>* SaverLoader::loadPlayers() {
 		cout << numberOfPlayers << endl;
 
 		// now we're going to do a loop to read the information for each player
-		for (int i = 0; i < numberOfPlayers; ++i) {
-
+		for (int r = 0; r < numberOfPlayers; ++r) {
+			cout << "Inside reading player loop" << endl;
 			// here is an empty player object
 			Player* newPlayer = new Player();
-
+			cout << "Creating newPLAYER" << endl;
 			// these are temporary holders for information that we will feed to the data members of the player
-			string playerName;
+			string playerName = "";
 			int armies;
 			int numArtillery;
 			int numCavalry;
@@ -552,74 +552,85 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "PLAYER NAME: " << playerName << endl;
 			newPlayer->setName(playerName);
 
 			fin >> armies;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "ARMIES: " << armies << endl;
 			newPlayer->setTotalNumArmies(armies);
 
 			fin >> numArtillery;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "NUMBER ARTILLERY CARDS: " << numArtillery << endl;
 			newPlayer->setNumCardsArtillery(numArtillery);
 
 			fin >> numCavalry;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "NUMBER CAVALRY CARDS: " << numCavalry << endl;
 			newPlayer->setNumCardsCavalry(numCavalry);
 
 			fin >> numInfantry;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "NUMBER INFANTRY CARDS: " << numInfantry << endl;
 			newPlayer->setNumCardsInfantry(numInfantry);
 
 			fin >> numWild;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "NUMBER WILD CARDS: " << numWild << endl;
 			newPlayer->setNumCardsWild(numWild);
 
 			fin >> numContinents;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "CONTINENTS OWNED: " << numContinents << endl;
 			newPlayer->setNumOwnedContinents(numContinents);
 
 			fin >> numCountries;
 			if (fin.fail()) {
 				throw 20;
 			}
+			cout << "COUNTRIES OWNED: " << numCountries << endl;
 			newPlayer->setNumOwnedCountries(numCountries);
 			
 			// let's create our owned continents. Right now, we're
-			// going to create continents that ONLY have an ID
-			// number
+			// going to create continents that ONLY have a name
 			if (numContinents > 0) {
+				cout << "CREATING OWNED CONTINENTS" << endl;
 				continentList = new list<Continent*>();
 				for (int j = 0; j < numContinents; ++j) {
 					Continent* newContinent = new Continent();
-					fin >> newContinent->id;
+					fin >> newContinent->name;
+					cout << "CONTINENT: " << newContinent->name << endl;
 					if (fin.fail()) {
 						throw 20;
 					}
 					continentList->push_back(newContinent);
 				}
 			}
+			cout << "SETTING OWNED CONTINENTS" << endl;
 			newPlayer->setOwnedContinents(continentList);
 			
 			// let's create our owned countries. Right now, we're
-			// going to create countries that ONLY have an ID
-			// number
+			// going to create countries that ONLY have a name
+			cout << "SETTING OWNED COUNTRIES: " << endl;
 			if (numCountries > 0) {
 				countryList = new list<Country*>();
-				for (int j = 0; j < numContinents; ++j) {
+				for (int j = 0; j < numCountries; ++j) {
 					Country* newCountry = new Country();
-					fin >> newCountry->id;
+					fin >> newCountry->name;
+					cout << "COUNTRY: " << newCountry->name << endl;
 					if (fin.fail()) {
 						throw 20;
 					}
@@ -631,30 +642,40 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			// now let's create our player cards
 			// starting with artillery cards
 
-			for (int a = numArtillery; a < numArtillery; ++a) {
+			cout << "LOADING ARTILLERY CARDS " << endl;
+			for (int a = 0; a < numArtillery; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard; 
+				cout << countryOnCard << " ";
 				Card* newCard = new Card(countryOnCard, artillery);
 				artilleryCards->push_back(newCard);
 			}
 			newPlayer->setPlayersArtilleryCards(artilleryCards);
+			cout << endl;
 
-			for (int a = numCavalry; a < numCavalry; ++a) {
+			cout << "LOADING CAVALRY CARDS " << endl;
+			for (int a = 0; a < numCavalry; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard;
+				cout << countryOnCard << " ";
 				Card* newCard = new Card(countryOnCard, cavalry);
 				cavalryCards->push_back(newCard);
 			}
+			cout << endl;
 			newPlayer->setPlayersCavalryCards(cavalryCards);
 
-			for (int a = numInfantry; a < numInfantry; ++a) {
+			cout << "LOADING INFANTRY CARDS" << endl;
+			for (int a = 0; a < numInfantry; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard;
+				cout << countryOnCard << " ";
 				Card* newCard = new Card(countryOnCard, infantry);
 				infantryCards->push_back(newCard);
 			}
 			newPlayer->setPlayersInfantryCards(infantryCards);
+			cout << endl; 
 
+			cout << "LOADING WILD CARDS" << endl;
 			for (int a = numWild; a < numWild; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard;
@@ -663,7 +684,7 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			}
 			newPlayer->setPlayersWildCards(wildCards);
 
-
+			cout << "INSERTING PLAYER" << endl;
 			gamePlayers->push_back(newPlayer);
 		}
 
@@ -677,4 +698,199 @@ vector<Player*>* SaverLoader::loadPlayers() {
 	fin.close(); 
 
 	return gamePlayers;
+}
+
+
+list<Card*>* SaverLoader::loadCards(cardType card) {
+	ifstream fin;
+	int numCards;
+	string heading;
+	list<Card*>* cardList = new list<Card*>();
+
+	if (card==artillery) heading = "ARTILLERY";
+	else if (card==infantry) heading = "INFANTRY";
+	else if (card==cavalry) heading = "CAVALRY";
+	else heading = "WILD";
+
+	fin.open(fileName);
+
+	try {
+		
+		string cardHeading = "";
+		while (cardHeading.compare(heading) != 0) {
+			fin >> cardHeading;
+		}
+
+		fin >> numCards;
+		if (fin.fail()) {
+			throw 20;
+		}
+
+		for (int i = 0; i < numCards; ++i) {
+			string cardName = "";
+			fin >> cardName; 
+			if (fin.fail()) {
+				throw 20;
+			}
+			cardList->push_back(new Card(cardName, card));
+		}
+
+	}
+	catch (...) {
+		cout << "ERROR LOADING ARTILLERY CARDS" << endl;
+		return NULL;
+	}
+
+	return cardList;
+
+};
+
+string SaverLoader::loadCurrentPlayer() {
+	ifstream fin;
+	string currentPlayerName = "";
+	fin.open(fileName);
+
+	try {
+
+		string currentPlayerHeading = "";
+		while (currentPlayerHeading.compare("CURRENTPLAYER") != 0) {
+			fin >> currentPlayerHeading;
+		}
+
+		fin >> currentPlayerName;
+		if (fin.fail()) {
+			throw 20;
+		}
+	}
+	catch (...) {
+		cout << "ERROR LOADING CURRENT PLAYER" << endl;
+		return "";
+	}
+	return currentPlayerName;
+}
+
+int SaverLoader::loadCurrentPhase() {
+	ifstream fin;
+	int currentphase = -1;
+	fin.open(fileName);
+
+	try {
+
+		string currentPhaseHeading = "";
+		while (currentPhaseHeading.compare("CURRENTPHASE") != 0) {
+			fin >> currentPhaseHeading;
+		}
+
+		fin >> currentphase;
+		if (fin.fail()) {
+			throw 20;
+		}
+	}
+	catch (...) {
+		cout << "ERROR LOADING CURRENT PHASE" << endl;
+		return 999;
+	}
+	return currentphase;
+}
+
+int SaverLoader::loadNumCardSetsTradedIn() {
+	ifstream fin;
+	int numTradedIn = -1;
+	fin.open(fileName);
+
+	try {
+
+		string numTradedHeading = "";
+		while (numTradedHeading.compare("NUMCARDSETSTRADED") != 0) {
+			fin >> numTradedHeading;
+		}
+
+		fin >> numTradedIn;
+		if (fin.fail()) {
+			throw 20;
+		}
+	}
+	catch (...) {
+		cout << "ERROR LOADING NUM CARDS TRADED IN" << endl;
+		return 999;
+	}
+	return numTradedIn;
+}
+
+void SaverLoader::savePlayersAndCards(Game* game) {
+	 ofstream fout; 
+
+	 fout.open(fileName, ios::ate);
+
+	 fout << "PLAYERS " << endl;
+	 fout << game->gamePlayers->size() << endl;
+	 for (vector<Player*>::iterator i = (game->gamePlayers)->begin(); i != (game->gamePlayers)->end(); ++i) {
+		 fout << (*i)->getName() << " " << (*i)->getTotalNumArmies() << " " << (*i)->getNumCardsArtillery() << " ";
+		 fout << (*i)->getNumCardsCavalry() << " " << (*i)->getNumCardsInfanty() << " " << (*i)->getNumCardsWild() << endl;
+		 fout << (*i)->getNumOfOwnedContinents() << endl;
+		 fout << (*i)->getNumOfOwnedCountries() << endl;
+		 
+		 // write out the owned continents name
+		 list<Continent*>* continentList = (*i)->getOwnedContinents();
+
+		 for (list<Continent*>::iterator j = continentList->begin(); j != continentList->end(); ++j) {
+			 fout << (*j)->getName() << " ";
+		 }
+		 fout << endl;
+
+		 // write out the owned countries names
+		 list<Country*>* countryList = (*i)->getOwnedCountries();
+
+		 for (list<Country*>::iterator j = countryList->begin(); j != countryList->end(); ++j) {
+			 fout << (*j)->getName() << " ";
+		 }
+		 fout << endl;
+
+		 // write out the artillery card names
+		 fout << "ARTILLERY ";
+		 list<Card*>* artilleryCards = (*i)->getPlayersArtilleryCards();
+
+		 for (list<Card*>::iterator j = artilleryCards->begin(); j != artilleryCards->end(); ++j) {
+			 fout << (*j)->getCountryOnCard() << " ";
+		 }
+		 fout << endl;
+
+		 // write out the cavalry card names
+		 fout << "CAVALRY ";
+		 list<Card*>* cavalryCards = (*i)->getPlayersCavalryCards();
+
+		 for (list<Card*>::iterator j = cavalryCards->begin(); j != cavalryCards->end(); ++j) {
+			 fout << (*j)->getCountryOnCard() << " ";
+		 }
+		 fout << endl;
+
+		 // write out the infantry card names
+		 fout << "INFANTRY ";
+		 list<Card*>* infantryCards = (*i)->getPlayersInfantryCards();
+
+		 for (list<Card*>::iterator j = infantryCards->begin(); j != infantryCards->end(); ++j) {
+			 fout << (*j)->getCountryOnCard() << " ";
+		 }
+		 fout << endl;
+
+		 // write out the wild card names
+		 fout << "WILD ";
+		 list<Card*>* wildCards = (*i)->getPlayersWildCards();
+
+		 for (list<Card*>::iterator j = wildCards->begin(); j != wildCards->end(); ++j) {
+			 fout << (*j)->getCountryOnCard() << " ";
+		 }
+		 fout << endl;
+
+
+	 }
+}
+
+void SaverLoader::saveState(Game* game) {
+	ofstream fout;
+
+	fout.open(fileName, ios::ate);
+
+	fout << "CURRENTPLAYER " << (game->currentPlayer)->getName() << endl;
+	fout << "CURRENTPHASE " << (game->phase) << endl;
 }
