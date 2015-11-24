@@ -20,3 +20,4 @@ void GameDirector::constructGame() {
 Game* GameDirector::returnGame() {
 	return theGame->getGame();
 }
+

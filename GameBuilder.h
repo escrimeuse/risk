@@ -16,6 +16,7 @@ public:
 	Game* getGame() {
 		return myGame;
 	}
+	
 };
 
 #endif

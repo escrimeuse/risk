@@ -20,7 +20,7 @@ class SaverLoader {
 public:
 	SaverLoader();
 	SaverLoader(string fn);
-	void save(Map *map);
+	void savingMap(Map *map);
 	static const string extension;
 	Map* loadMap();
 	vector<Player*>* loadPlayers();
@@ -28,7 +28,9 @@ public:
 	string loadCurrentPlayer();
 	int loadCurrentPhase();
 	int loadNumCardSetsTradedIn();
-//	void saveGame(Game* game);
+	void savePlayersAndCards(Game* game);
+	void saveState(Game* game);
+	
 
 private:
 	string fileName;
@@ -37,8 +39,7 @@ private:
 	void saveCountries(ofstream& out, Map *map);
 	void saveContinents(ofstream& out, Map *map);
 	void saveAdjencencies(ofstream& out, Map *map);
-	void savePlayersAndCards(Game* game);
-	void saveState(Game* game);
+	
 	/*void loadMap(ifstream& in, Map* map);
 	void loadCountries(ifstream& in, Map* map);
 	void loadContinents(ifstream& in, Map* map);

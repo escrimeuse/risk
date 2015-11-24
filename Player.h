@@ -27,11 +27,9 @@ public:
 	void setTurn(int newTurn) {
 		turn = newTurn;
 	};
-
 	void setTotalNumArmies(int newNumArmies) {
 		armies = newNumArmies;
 	};
-
 	void setOwnedCountries(list<Country*> *countries) {
 		ownedCountries = countries;
 	};
@@ -65,11 +63,9 @@ public:
 	std::string getName() const{
 		return name;
 	};
-
 	int getTurn() {
 		return turn;
 	};
-
 	int getNumOfOwnedCountries() const {
 		return numOfOwnedCountries;
 	};
@@ -97,6 +93,8 @@ public:
 	int getTotalNumArmies() {
 		return armies;
 	};
+
+
 	bool isActive(){
 		if (numOfOwnedCountries != 0)
 			return true;

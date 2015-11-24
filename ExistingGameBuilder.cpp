@@ -79,8 +79,8 @@ void ExistingGameBuilder::buildState() {
 	}
 
 	// now load the current phase (reinforcement, battle, fortification...)
-	int phase = saveload->loadCurrentPhase();
-
+	myGame->phase = saveload->loadCurrentPhase();
+	
 
 
 

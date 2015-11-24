@@ -11,6 +11,10 @@
 #include "GameDirector.h"
 #include "GameBuilder.h"
 #include "ExistingGameBuilder.h"
+#include "SaveDirector.h"
+#include "SaveGameBuilder.h"
+#include "SaveGame.h"
+
 
 #include <iostream>
 #include<sstream>
@@ -36,5 +40,21 @@ int main() {
 	Game* newGame = themainbuilder->returnGame();
 	cout << "Game successfully loaded!" << endl;
 
+	
+	cout << "**************************************" << endl;
+	cout << "   SAVING A GAME TO A FILE USING THE  " << endl;
+	cout << "           BUILDER PATTERN            " << endl;
+	cout << "**************************************" << endl;
+
+	cout << "Creating the SaveBuilder object..." << endl;
+	SaverLoader* mysaver = new SaverLoader("gamesaved");
+	SaveGameBuilder* mysavebuilder = new SaveGame(newGame,mysaver);
+
+	cout << "Creating the SaveDirector object..." << endl;
+	SaveDirector* savechef = new SaveDirector(mysavebuilder);
+
+	cout << "Saving the game..." << endl;
+
+	savechef->saveGame();
 
 }

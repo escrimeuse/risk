@@ -38,7 +38,7 @@ SaverLoader::SaverLoader(string fn) {	// Initialize fileName to GivenName.map
 /**
 * Saves a given map into file
 */
-void SaverLoader::save(Map *map) {
+void SaverLoader::savingMap(Map *map) {
 	ofstream out(fileName.c_str());		//Opens or creates file
 	saveMap(out, map);					// Save map info
 	saveCountries(out, map);			//Save country list
@@ -820,7 +820,7 @@ int SaverLoader::loadNumCardSetsTradedIn() {
 void SaverLoader::savePlayersAndCards(Game* game) {
 	 ofstream fout; 
 
-	 fout.open(fileName, ios::ate);
+	 fout.open(fileName, ios::app);
 
 	 fout << "PLAYERS " << endl;
 	 fout << game->gamePlayers->size() << endl;
@@ -889,8 +889,54 @@ void SaverLoader::savePlayersAndCards(Game* game) {
 void SaverLoader::saveState(Game* game) {
 	ofstream fout;
 
-	fout.open(fileName, ios::ate);
+	fout.open(fileName, ios::app);
 
+	// write out the artillery cards
+	fout << "ARTILLERY ";
+	fout << game->gameArtilleryCards->size() << " ";
+	
+	if (game->gameArtilleryCards->size() > 0) {
+		for (list<Card*>::iterator i = game->gameArtilleryCards->begin(); i != game->gameArtilleryCards->end(); ++i) {
+			fout << (*i)->getCountryOnCard() << " ";
+		}
+	}
+	fout << endl;
+
+	// write out the infantry cards
+	fout << "INFANTRY ";
+	fout << game->gameInfantryCards->size() << " ";
+
+	if (game->gameInfantryCards->size() > 0) {
+		for (list<Card*>::iterator i = game->gameInfantryCards->begin(); i != game->gameInfantryCards->end(); ++i) {
+			fout << (*i)->getCountryOnCard() << " ";
+		}
+	}
+	fout << endl;
+
+	// write out the cavalry cards
+	fout << "CAVALRY ";
+	fout << game->gameCavalryCards->size() << " ";
+
+	if (game->gameCavalryCards->size() > 0) {
+		for (list<Card*>::iterator i = game->gameCavalryCards->begin(); i != game->gameCavalryCards->end(); ++i) {
+			fout << (*i)->getCountryOnCard() << " ";
+		}
+	}
+	fout << endl;
+
+	// write out the wild cards
+	fout << "WILD ";
+	fout << game->gameWildCards->size() << " ";
+
+	if (game->gameWildCards->size() > 0) {
+		for (list<Card*>::iterator i = game->gameWildCards->begin(); i != game->gameWildCards->end(); ++i) {
+			fout << (*i)->getCountryOnCard() << " ";
+		}
+	}
+	fout << endl;
+
+	fout << "NUMCARDSETSTRADED " << (game->numCardSetsTradedIn) << endl;
 	fout << "CURRENTPLAYER " << (game->currentPlayer)->getName() << endl;
 	fout << "CURRENTPHASE " << (game->phase) << endl;
 }
+
