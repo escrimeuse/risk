@@ -9,11 +9,11 @@ GameDirector::GameDirector(GameBuilder* game) {
 }
 
 void GameDirector::constructGame() {
-	cout << "Building the map" << endl;
+
 	theGame->buildMap();
-	cout << "Building the players" << endl;
+
 	theGame->buildPlayers();
-	cout << "Building the state" << endl;
+
 	theGame->buildState();
 }
 

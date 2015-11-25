@@ -84,7 +84,7 @@ void SaverLoader::saveCountries(ofstream& out, Map *map) {
 	for (int i = 0; i < map->getNumCountries(); i++) {			// For each country
 		Country *current = (* map->getCountries())[i];
 		out <<current->getId() << " " << current->getName() // saves id/name/owner/troops
-			<< " " << current->getOwner() << " " << current->getArmies() << endl;
+			<< " " << current->getOwner()->getName() << " " << current->getArmies() << endl;
 	}
 	out << "\n";
 }
@@ -188,14 +188,14 @@ Map* SaverLoader::loadMap() {
 		if (fin.fail()) {
 			throw 20;
 		}
-		cout << mapName << endl;
+		
 
 		// read in the number of countries
 		fin >> numberCountries;
 		if (fin.fail()) {
 			throw 20;
 		}
-		cout << numberCountries << endl;
+		
 
 		
 		for (int i = 0; i < numberCountries; ++i) {
@@ -205,26 +205,25 @@ Map* SaverLoader::loadMap() {
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newCountry->id << " ";
+			
 
 			fin >> newCountry->name;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newCountry->name << " ";
+			
 
 			fin >> newCountry->owner;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newCountry->owner << " ";
+			
 
 			fin >> newCountry->numArmies;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newCountry->numArmies << " ";
-			cout << endl;
+			
 
 			countryList->push_back(newCountry);
 		}
@@ -246,7 +245,7 @@ Map* SaverLoader::loadMap() {
 		if (fin.fail()) {
 			throw 20;
 		}
-		cout << numberContinents << endl;
+		
 
 		
 
@@ -257,25 +256,25 @@ Map* SaverLoader::loadMap() {
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newContinent->id << " ";
+			
 
 			fin >> newContinent->name;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newContinent->name << " ";
+			
 
 			fin >> newContinent->numCountries;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newContinent->numCountries << " ";
+			
 
 			fin >> newContinent->controlValue;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << newContinent->controlValue << " ";
+			
 
 			newContinent->countryIds = new int[newContinent->numCountries];
 
@@ -284,7 +283,7 @@ Map* SaverLoader::loadMap() {
 				if (fin.fail()) {
 					throw 20;
 				}
-				cout << (newContinent->countryIds)[i] << endl;
+				
 			}
 
 			continentList->push_back(newContinent);
@@ -309,7 +308,7 @@ Map* SaverLoader::loadMap() {
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << tempCountryId << endl;
+			
 			CountryL* country = NULL;
 
 			// search country list to find the country corresponding to this ID
@@ -332,9 +331,9 @@ Map* SaverLoader::loadMap() {
 				if (fin.fail()) {
 					throw 20;
 				}
-				cout << (country->adjacencies)[k] << " ";
+				
 			}
-			cout << endl;
+			
 		}
 
 		bool** adjacencyMatrix = new bool*[numberCountries];
@@ -524,14 +523,14 @@ vector<Player*>* SaverLoader::loadPlayers() {
 		if (fin.fail()) {
 			throw 20;
 		}
-		cout << numberOfPlayers << endl;
+		
 
 		// now we're going to do a loop to read the information for each player
 		for (int r = 0; r < numberOfPlayers; ++r) {
-			cout << "Inside reading player loop" << endl;
+			
 			// here is an empty player object
 			Player* newPlayer = new Player();
-			cout << "Creating newPLAYER" << endl;
+			
 			// these are temporary holders for information that we will feed to the data members of the player
 			string playerName = "";
 			int armies;
@@ -552,85 +551,85 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "PLAYER NAME: " << playerName << endl;
+			
 			newPlayer->setName(playerName);
 
 			fin >> armies;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "ARMIES: " << armies << endl;
+			
 			newPlayer->setTotalNumArmies(armies);
 
 			fin >> numArtillery;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "NUMBER ARTILLERY CARDS: " << numArtillery << endl;
+			
 			newPlayer->setNumCardsArtillery(numArtillery);
 
 			fin >> numCavalry;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "NUMBER CAVALRY CARDS: " << numCavalry << endl;
+			
 			newPlayer->setNumCardsCavalry(numCavalry);
 
 			fin >> numInfantry;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "NUMBER INFANTRY CARDS: " << numInfantry << endl;
+			
 			newPlayer->setNumCardsInfantry(numInfantry);
 
 			fin >> numWild;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "NUMBER WILD CARDS: " << numWild << endl;
+			
 			newPlayer->setNumCardsWild(numWild);
 
 			fin >> numContinents;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "CONTINENTS OWNED: " << numContinents << endl;
+			
 			newPlayer->setNumOwnedContinents(numContinents);
 
 			fin >> numCountries;
 			if (fin.fail()) {
 				throw 20;
 			}
-			cout << "COUNTRIES OWNED: " << numCountries << endl;
+			
 			newPlayer->setNumOwnedCountries(numCountries);
 			
 			// let's create our owned continents. Right now, we're
 			// going to create continents that ONLY have a name
 			if (numContinents > 0) {
-				cout << "CREATING OWNED CONTINENTS" << endl;
+				
 				continentList = new list<Continent*>();
 				for (int j = 0; j < numContinents; ++j) {
 					Continent* newContinent = new Continent();
 					fin >> newContinent->name;
-					cout << "CONTINENT: " << newContinent->name << endl;
+					
 					if (fin.fail()) {
 						throw 20;
 					}
 					continentList->push_back(newContinent);
 				}
 			}
-			cout << "SETTING OWNED CONTINENTS" << endl;
+			
 			newPlayer->setOwnedContinents(continentList);
 			
 			// let's create our owned countries. Right now, we're
 			// going to create countries that ONLY have a name
-			cout << "SETTING OWNED COUNTRIES: " << endl;
+			
 			if (numCountries > 0) {
 				countryList = new list<Country*>();
 				for (int j = 0; j < numCountries; ++j) {
 					Country* newCountry = new Country();
 					fin >> newCountry->name;
-					cout << "COUNTRY: " << newCountry->name << endl;
+				
 					if (fin.fail()) {
 						throw 20;
 					}
@@ -642,40 +641,39 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			// now let's create our player cards
 			// starting with artillery cards
 
-			cout << "LOADING ARTILLERY CARDS " << endl;
 			for (int a = 0; a < numArtillery; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard; 
-				cout << countryOnCard << " ";
+				
 				Card* newCard = new Card(countryOnCard, artillery);
 				artilleryCards->push_back(newCard);
 			}
 			newPlayer->setPlayersArtilleryCards(artilleryCards);
-			cout << endl;
+			
 
-			cout << "LOADING CAVALRY CARDS " << endl;
+	
 			for (int a = 0; a < numCavalry; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard;
-				cout << countryOnCard << " ";
+				
 				Card* newCard = new Card(countryOnCard, cavalry);
 				cavalryCards->push_back(newCard);
 			}
-			cout << endl;
+			
 			newPlayer->setPlayersCavalryCards(cavalryCards);
 
-			cout << "LOADING INFANTRY CARDS" << endl;
+			
 			for (int a = 0; a < numInfantry; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard;
-				cout << countryOnCard << " ";
+				
 				Card* newCard = new Card(countryOnCard, infantry);
 				infantryCards->push_back(newCard);
 			}
 			newPlayer->setPlayersInfantryCards(infantryCards);
-			cout << endl; 
+			
 
-			cout << "LOADING WILD CARDS" << endl;
+			
 			for (int a = numWild; a < numWild; ++a) {
 				string countryOnCard = "";
 				fin >> countryOnCard;
@@ -684,7 +682,7 @@ vector<Player*>* SaverLoader::loadPlayers() {
 			}
 			newPlayer->setPlayersWildCards(wildCards);
 
-			cout << "INSERTING PLAYER" << endl;
+			
 			gamePlayers->push_back(newPlayer);
 		}
 
@@ -847,7 +845,7 @@ void SaverLoader::savePlayersAndCards(Game* game) {
 		 fout << endl;
 
 		 // write out the artillery card names
-		 fout << "ARTILLERY ";
+		 
 		 list<Card*>* artilleryCards = (*i)->getPlayersArtilleryCards();
 
 		 for (list<Card*>::iterator j = artilleryCards->begin(); j != artilleryCards->end(); ++j) {
@@ -856,7 +854,7 @@ void SaverLoader::savePlayersAndCards(Game* game) {
 		 fout << endl;
 
 		 // write out the cavalry card names
-		 fout << "CAVALRY ";
+		 
 		 list<Card*>* cavalryCards = (*i)->getPlayersCavalryCards();
 
 		 for (list<Card*>::iterator j = cavalryCards->begin(); j != cavalryCards->end(); ++j) {
@@ -865,7 +863,7 @@ void SaverLoader::savePlayersAndCards(Game* game) {
 		 fout << endl;
 
 		 // write out the infantry card names
-		 fout << "INFANTRY ";
+		 
 		 list<Card*>* infantryCards = (*i)->getPlayersInfantryCards();
 
 		 for (list<Card*>::iterator j = infantryCards->begin(); j != infantryCards->end(); ++j) {
@@ -874,7 +872,7 @@ void SaverLoader::savePlayersAndCards(Game* game) {
 		 fout << endl;
 
 		 // write out the wild card names
-		 fout << "WILD ";
+		 
 		 list<Card*>* wildCards = (*i)->getPlayersWildCards();
 
 		 for (list<Card*>::iterator j = wildCards->begin(); j != wildCards->end(); ++j) {
