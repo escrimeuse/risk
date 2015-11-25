@@ -12,7 +12,6 @@ public:
 	GameDirector(GameBuilder* game);
 	void constructGame();
 	Game* returnGame();
-	void saveGame();
 };
 
 #endif
