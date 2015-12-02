@@ -1,133 +1,511 @@
-/*
- * driver.cpp
- *
- *  Created on: Oct 23, 2015
- *      Author: cclp94
- */
-#include <iostream>
-#include "map.h"
-#include "saverLoader.h"
+#include "Map/Map.h"
+#include "Map/MapDemo.h"	
+#include "Player/Player.h"
+#include "Map/Country.h"
+#include "Game/Startphase.h"
+#include "Game/Fortification.h"
+#include "SaveLoad\SaveLoader.h"
+#include "Game/Battle.h"
 
-#define PREDEFINED_MAPS 3
+#include <string>
+#include <iostream>
+
+#include <iostream>
+#include<sstream>
+#include<list>
 
 using namespace std;
 
-static int countryCounter = 0;
+namespace mapDemo {
 
-Country c1, c2, c3;
-Continent continent1, continent2;
-Map map;
 
-void setCountry(Country& country, string name, int troups, int owner);
-void initializeMap(const string name);
-void createMap(string name);
+	//demonstration of the map-creation
+	static MapDemo* makeMap() {
+		string mapName;
+		string userIn;
+		cout << "\nWhat is the name of the map you want to make?: ";
+		cin >> mapName;
+		MapDemo *newMap = new MapDemo(mapName);
+		cout << "\n" << newMap->getName() << " will have 3 continents, with 2 countries in each.\n\n"
+			<< "Please name your 3 continents: " << endl;
+		newMap->setContinentNames();
+		cout << "All continents have been named. The names are: " << newMap->getContinentNames() << "\n"
+			<< "Please name your 6 countries: " << endl;
+		newMap->setCountryNames();
 
-int main(){
-	const std::string predefinedMaps[PREDEFINED_MAPS] = {"Canada", "Brazil", "United States"};		// Predefined countries hard coded
-	SaverLoader *s;
-	char option;
-	int mapOption;
-	cout << "Would you like to save or load a file (s/l): ";
-	cin >> option;
-	if(option == 's'){			// if save option selected
-		cout << "select one of the predefined maps to save: " << endl;
-		cout << "0. Canada" << endl;
-		cin >> mapOption;
-		switch (mapOption){
-		case 0:
-			s = new SaverLoader(predefinedMaps[mapOption]);		// initialize saverLoader obj with selected file name
-			createMap(predefinedMaps[mapOption]);				// create selected map
+		cout << "\nAll countries have been named. The names are: " << newMap->getCountryNames() << "\n" << endl;
 
-			s->save(map);										// save map
-			MapAPI::displayMap(&map);							// display map
-			//Deallocate Space											// deallocates
-			delete [] continent1.countries;
-			delete [] continent2.countries;
-			for(int i =0; i < map.numCountries;i++)
-			    delete [] map.adjencecies[i];
-			delete [] map.adjencecies;
-		}
-	}else{					// load option selected
-		cout << "select one of the predefined maps to load: " << endl;
-		for(int i = 0; i < PREDEFINED_MAPS; i++)
-			cout << i <<". " << predefinedMaps[i] << endl;		// choose predefined maps
-		cin >> mapOption;
-		s = new SaverLoader(predefinedMaps[mapOption]);			// creates saverLoader obj with file name
-		Map* map2 = s->load();									// load map from selected file
-		MapAPI::displayMap(map2);								// displays map
-		MapAPI::deleteMap(map2);								// deallocated map
+		//printing the countries per continent
+		newMap->printContinentsCountries(1);
+		newMap->printContinentsCountries(2);
+		newMap->printContinentsCountries(3);
+		cout << endl;
+
+		//DEMO1 phase
+		cout << "\n DEMO1: Creating an incompletely connected map..." << endl;
+		newMap->demoMap1(); //function creates adjacencies between countries
+
+		string check = "";
+		if (newMap->getContinentsValid())//test if the map's continents are valid
+			check = "true";
+		else
+			check = "false";
+		cout << "\nContinents Valid?: " << check << endl;
+
+		check = ""; // precaution...
+		if (newMap->getIsConnected())//test if the map is connected
+			check = "true";
+		else
+			check = "false";
+		cout << "\nAll countries connected?: " << check << endl;
+
+		//DEMO2 phase
+		cout << "\n DEMO2: Adding adjacencies to have valid continents..." << endl;
+		newMap->demoMap2(); //function creates more adjacencies between countries
+		if (newMap->getContinentsValid())//test if the map's continents are valid
+			check = "true";
+		else
+			check = "false";
+		cout << "\nContinents Valid?: " << check << endl;
+
+		check = ""; // precaution...
+		if (newMap->getIsConnected())//test if the map is connected
+			check = "true";
+		else
+			check = "false";
+		cout << "\nAll countries connected?: " << check << endl;
+
+		//DEMO3 phase
+		cout << "\n DEMO3: Adding adjacencies to have connected map..." << endl;
+		newMap->demoMap3(); //function creates more adjacencies between countries
+		if (newMap->getContinentsValid())//test if the map's continents are valid
+			check = "true";
+		else
+			check = "false";
+		cout << "\nContinents Valid?: " << check << endl;
+
+		check = ""; // precaution...
+		if (newMap->getIsConnected())//test if the map is connected
+			check = "true";
+		else
+			check = "false";
+		cout << "\nAll countries connected?: " << check << endl;
+
+		//allow user to create adjacency
+		cout << "\nLet's make 2 more countries adjacent."
+			<< "\nWhich two countries would you like to make adjacent?\n"
+			<< "First country: ";
+		string c1, c2;
+		cin >> c1;
+		cout << "Second country: ";
+		cin >> c2;
+		newMap->makeAdjacent(c1, c2);
+		newMap->printAdjacentCountryNames(c1);
+		newMap->printAdjacentCountryNames(c2);
+
+		std::cin.ignore();
+		return newMap;
+
 	}
-    delete s;													// delete saverLoader obj
-    return 0;
+
+	//making changes to the map
+	static int mapEditAction(int choice, Map *m) {
+		switch (choice) {
+		case 1: {cout << "The map's current name is " << m->getName() << ". What is its new name?: ";
+			string input = "";
+			getline(cin, input);
+			m->setName(input);
+			cout << "The map's name is " << m->getName() << ".\n";
+			return 0;
+		}
+		case 2: {cout << "CONTINENTS: " << m->getContinentNames() << "\n"
+			<< "Which continent's name do you want to change?: ";
+			string toChange = "";
+			string changeTo = "";
+			cin >> toChange;
+			cout << "What do you want to change it to?: ";
+			cin >> changeTo;
+			Continent *target = m->getContinentByName(toChange);
+			if (target != NULL) {
+				target->setName(changeTo);
+				cout << "Continent name is " << target->getName() << ".\n";
+			}
+			else {
+				cout << toChange << " is not a valid continent name. \n";
+			}
+			return 0;
+		}
+		case 3: {cout << "COUNTRIES: " << m->getCountryNames() << "\n"
+			<< "Which country's name do you want to change?: ";
+			string toChange = "";
+			string changeTo = "";
+			getline(cin, toChange);
+			cout << "What do you want to change it to?: ";
+			getline(cin, changeTo);
+			Country *target = m->getCountryByName(toChange);
+			if (target != NULL) {
+				target->setName(changeTo);
+				cout << "Country name is " << target->getName() << ".\n";
+			}
+			else {
+				cout << toChange << " is not a valid country name. \n";
+			}
+			return 0;
+		}
+		case 4: {
+			//allow user to create adjacency
+			cout << "\nWhich two countries would you like to make adjacent?\n"
+				<< "First country: ";
+			string c1, c2;
+			cin >> c1;
+			cout << "Second country: ";
+			cin >> c2;
+			m->makeAdjacent(c1, c2);
+			m->printAdjacentCountryNames(c1);
+			m->printAdjacentCountryNames(c2);
+			return 0;
+		}
+		case 5: {//allow user to make two countries NOT adjacent
+			cout << "\nWhich two countries would you like to make NOT adjacent?\n"
+				<< "First country: ";
+			string c1, c2;
+			cin >> c1;
+			cout << "Second country: ";
+			cin >> c2;
+			m->makeNotAdjacent(c1, c2);
+			m->printAdjacentCountryNames(c1);
+			m->printAdjacentCountryNames(c2);
+			return 0;
+		}
+		case 6: { return 500; }//return to main menu
+		}
+		return 0;
+	}
+
+	//demonstration of the map-editing
+	static int editMap(Map *m) {
+		cout << "==========================\n"
+			<< "Welcome to the Map Editor!\n"
+			<< "==========================\n";
+
+		while (true) {
+			cout << "\nWhat do you wish to edit?\n"
+				<< "[ 1 ] Map name\n"
+				<< "[ 2 ] A continent's name\n"
+				//<< "COUNTRIES: " <<m->getCountryNames()<<"\n"
+				<< "[ 3 ] A country's name\n"
+				<< "[ 4 ] Add country's adjacencies\n"
+				<< "[ 5 ] Remove country's adjacencies\n"
+				<< "[ 6 ] Exit" << endl;
+			string input = "";
+			getline(cin, input);
+
+			// This code converts from string to number safely.
+			stringstream myStream(input);
+			int userChoice = 0;
+			if (myStream >> userChoice) {
+				int check = mapEditAction(userChoice, m);
+				if (check == 500)
+					return 500; //if mapCreation returned 500, return to main menu
+			}
+			else
+				cout << "Not a valid choice. Please try again" << endl;
+		}
+		return 0;//shouldn't reach this
+	}
+
+	static int mapCreator(int choice) {
+		switch (choice) {
+		case 1: {
+			Map* m = makeMap();
+			cout << endl;
+			cout << "Saving the map as 'TestMap.map'..." << endl;
+			SaverLoader *s = new SaverLoader("TestMap");
+			s->save(m);
+			cout << "Saved map as 'TestMap.map'" << endl;
+			return 0;
+		}
+		case 2: case 3: case 4: {
+			cout << "\n[ FEATURE CURRENTLY UNAVAILABLE :( ]\n";
+			return 0;//return to map creation menu
+		}
+		case 5: { return 500; }//return to main menu
+		}
+		return 0;//shouldnt' reach here, but will return to main menu
+	}
+
+	static int mapEditor(int choice) {
+		switch (choice) {
+		case 1: {//Edit good map
+			cout << "Edit good map";
+			SaverLoader *s = new SaverLoader("TestMap");
+			Map *m = s->load();
+			if (m != NULL) {
+				editMap(m);
+				if (m->getIsConnected() && m->getContinentsValid())
+					s->save(m);
+				else
+					cout << "Map not valid. Cannot save map." << endl;
+				return 0;
+			}
+			else {
+				cout << "Invalid map! SHAME!" << endl;
+				return 0;
+			}
+
+		}
+		case 2: {//Edit bad1 map
+			cout << "Attempting to load map...";
+			SaverLoader *s = new SaverLoader("MyBadMap1");
+			Map *m = s->load();
+			if (m != NULL) {
+				editMap(m);
+				if (m->getIsConnected() && m->getContinentsValid())
+					s->save(m);
+				else
+					cout << "Map not valid. Cannot save map." << endl;
+				return 0;
+			}
+			else {
+				cout << "Invalid map! SHAME!" << endl;
+				return 0;
+			}
+		}
+		case 3: {//Edit bad2 map
+			cout << "Attempting to load map...";
+			SaverLoader *s = new SaverLoader("BadMap2");
+			Map *m = s->load();
+			if (m != NULL) {
+				editMap(m);
+				if (m->getIsConnected() && m->getContinentsValid())
+					s->save(m);
+				else
+					cout << "Map not valid. Cannot save map." << endl;
+				return 0;
+			}
+			else {
+				cout << "Invalid map! SHAME!" << endl;
+				return 0;
+			}
+		}
+		case 4: {//Edit bad3 map
+			cout << "Attempting to load map...";
+			SaverLoader *s = new SaverLoader("BadMap3");
+			Map *m = s->load();
+			if (m != NULL) {
+				editMap(m);
+				if (m->getIsConnected() && m->getContinentsValid())
+					s->save(m);
+				else
+					cout << "Map not valid. Cannot save map." << endl;
+				return 0;
+			}
+			else {
+				cout << "Invalid map! SHAME!" << endl;
+				return 0;
+			}
+			return 0;
+		}
+		case 5: { return 500; }//return to main menu
+		}
+		return 0;	//should not reach
+	}
+
+	//choices of the user from the map 
+	static int mapAction(int choice) {
+		switch (choice) {
+		case 1: {
+			cout << "==========================\n"
+				<< "Welcome to the Map Creator!\n"
+				<< "==========================\n";
+
+			while (true) {
+				cout << "\nWhat size map would you like to create:\n"
+					<< "[ 1 ] Demo (2 players)\n"
+					<< "[ 2 ] Small (2-3 players)\n"
+					<< "[ 3 ] Medium (3-4 players)\n"
+					<< "[ 4 ] Large (5-6 players)\n"
+					<< "[ 5 ] Exit" << endl;
+				string input = "";
+				getline(cin, input);
+
+				// This code converts from string to number safely.
+				stringstream myStream(input);
+				int userChoice = 0;
+				if (myStream >> userChoice) {
+					int check = mapCreator(userChoice);
+					if (check == 500)
+						return 500; //if mapCreation returned 500, return to main menu
+				}
+				else
+					cout << "Not a valid choice. Please try again" << endl;
+			}
+			return 0;//shouldn't reach this
+		}
+		case 2: {
+			cout << "=========================\n"
+				<< "Welcome to the Map Editor !\n"
+				<< "=========================\n";
+
+			while (true) {
+				cout << "\nWhich map would you like to edit:\n"
+					<< "[ 1 ] Good\n"
+					<< "[ 2 ] Bad1 (Corrupt File)\n"
+					<< "[ 3 ] Bad2 (Continents Invalid)\n"
+					<< "[ 4 ] Bad3 (Disconnected Map)\n"
+					<< "[ 5 ] Exit" << endl;
+				string input = "";
+				getline(cin, input);
+
+				// This code converts from string to number safely.
+				stringstream myStream(input);
+				int userChoice = 0;
+				if (myStream >> userChoice) {
+					int check = mapEditor(userChoice);
+					if (check == 500)
+						return 500; //if mapCreation returned 500, return to main menu
+				}
+				else
+					cout << "Not a valid choice. Please try again" << endl;
+			}
+			return 0;//shouldn't reach this
+		}
+
+		case 3: { return 500; }//return to main menu
+		}
+		return 0; // should not get here
+	}
+
+	static void mainMapMenu() {
+		cout << "=============================\n"
+			<< "Welcome to the Main Map Menu!\n"
+			<< "=============================\n";
+
+		while (true) {
+			cout << "\nWould you like to:\n"
+				<< "[ 1 ] Create new map?\n"
+				<< "[ 2 ] Edit existing map?\n"
+				<< "[ 3 ] Exit" << endl;
+			string input = "";
+			getline(cin, input);
+
+			// This code converts from string to number safely.
+			stringstream myStream(input);
+			int userChoice = 0;
+			if (myStream >> userChoice) {
+				int check = mapAction(userChoice);
+				if (check == 500)
+					return; //if userAction returned 5, return to main menu
+			}
+			else
+				cout << "Not a valid choice. Please try again" << endl;
+		}
+	}
+
 }
-/**
- * Hard coded implementation of a map creation
- */
-void createMap(const string name){
-	// creates countries
-	setCountry(c1, "Montreal", 3, 1);
-	setCountry(c2, "Quebec City", 2, 3);
-	setCountry(c3, "Toronto", 5, 1);
-	//Creates continents
-	continent1.name = "Quebec";
-	continent1.countries = new int[2];
-	continent2.countries = new int[1];
-	continent1.countries[0] = c1.id;
-	continent1.numCountries++;
-	continent1.countries[1] = c2.id;
-	continent1.numCountries++;
-	continent2.name = "Ontario";
-	continent2.countries[0] = c3.id;
-	continent2.numCountries++;
-	// fill map
-	initializeMap(name);
+
+using namespace mapDemo;
+
+int main() {
+	// MAP predefinedMAPS[]
+	int gameMode;
+	int numPlayers;
+	vector <Player*> activePlayers;
+	Startphase start;
+	start.welcome();
+	do {
+		gameMode = start.mainMenu();
+		switch (gameMode) {
+		case 0: //Map Editor goes here
+			mainMapMenu();
+			break;
+		case 1: // Game starts
+			Map* map = NULL;
+			bool validMapSelected = false;
+			while (!validMapSelected) {
+				cout << "\nWhich map would you like to load:\n"
+					<< "[ 1 ] Good\n"
+					<< "[ 2 ] Bad1 (Corrupt File)\n"
+					<< "[ 3 ] Bad2 (Continents Invalid)\n"
+					<< "[ 4 ] Bad3 (Disconnected Map)\n";
+				int userChoice = 0;
+				cin >> userChoice;
+
+				// This code converts from string to number safely.
+				
+				if (userChoice == 1) {
+					SaverLoader *s = new SaverLoader("TestMap");
+					map = s->load();
+					validMapSelected = true;
+				}
+				if (userChoice == 2 || userChoice==3 || userChoice==4) {
+					cout << "Not a valid choice. Please try again" << endl;
+				}
+		
+			}
+
+			if (map == NULL) {
+				cout << "Map not valid. Cannot load map." << endl;
+				return 0;
+			}
+			cout << map->getName();
+			numPlayers = start.initializeNumOfGamePlayers(activePlayers);
+			start.createPlayers(activePlayers, numPlayers);
+			start.initializePlayersTurn(activePlayers);
+			start.setStatistics(activePlayers);
+			start.assignCountries(activePlayers, map);
+			cout << activePlayers.size() << endl;
+
+			for (int i = 0; i < activePlayers.size(); i++) {
+				cout << "------------------------------------" << endl;
+				cout << activePlayers.at(i)->getName() << endl;
+				cout << "Countries: " << endl;
+				list<Country*> *countries = activePlayers.at(i)->getOwnedCountries();
+				for (list<Country*>::iterator i = countries->begin();
+				i != countries->end(); ++i) {
+					cout << (*i)->getName() << endl;
+				}
+			}
+
+			// Initial reenforcement
+			cout << "Starting intial reinforcement" << endl;
+			for (int i = 0; i < activePlayers.size(); i++) {
+				activePlayers.at(i)->placeArmiesOnCountriesLoop(10);
+				list<Country*> *countries = activePlayers.at(i)->getOwnedCountries();
+				for (list<Country*>::iterator i = countries->begin();
+				i != countries->end(); ++i) {
+					cout << "Country: " << (*i)->getName() << " | Armies: " << (*i)->getArmies() << endl;
+				}
+			}
+
+			cout << "Initial reinforcement Complete" << endl;
+
+			
+
+			char doPlayerTurns = 'Y';
+
+			while (doPlayerTurns=='Y' || doPlayerTurns=='y') {
+
+				for (int i = 0; i < activePlayers.size(); i++) {
+					(activePlayers[i])->reinforceCountries();
+					attackPhase(activePlayers[i], map);
+					// Fortification
+					Fortification fortification;
+					fortification.fortify((activePlayers[i]), map);
+				}
+
+				
+
+				cout << "Do you want to continue? Y/N "; 
+				
+				cin >> doPlayerTurns; 
+			}
+		
+			delete map;
+		}
+
+	} while (gameMode != 2); // Exit option
+	
+	return 0;
 }
-
-
-/**
- * Sets values to country attributes
- */
-void setCountry(Country& country, string name, int troups, int owner){
-    countryCounter++;
-    country.name = name;
-    country.troops = troups;
-    country.owner = owner;
-    country.id = countryCounter;
-}
-/**
- * fill map with countries and continents and its connections
- * @param name name of the map
- */
-void initializeMap(const string name){
-    map.name = name;
-    map.countries = new Country[countryCounter];
-    map.countries[0] = c1;
-    map.countries[1] = c2;
-    map.countries[2] = c3;
-    map.numCountries = countryCounter;
-    map.continents = new Continent[2];
-    map.continents[0] = continent1;
-    map.continents[1] = continent2;
-    map.numContinents = 2;
-    map.adjencecies = new bool*[countryCounter];
-    for (int i = 0; i < countryCounter; ++i)
-    {
-        map.adjencecies[i] = new bool[countryCounter];
-    }
-
-
-    map.adjencecies[0][0] = true;
-    map.adjencecies[0][1] = true;
-    map.adjencecies[0][2] = true;
-
-    map.adjencecies[1][0] = true;
-    map.adjencecies[1][1] = true;
-    map.adjencecies[1][2] = false;
-
-    map.adjencecies[2][0] = true;
-    map.adjencecies[2][1] = false;
-    map.adjencecies[2][2] = true;
-}
-
-
 
