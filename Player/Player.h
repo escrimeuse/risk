@@ -150,7 +150,7 @@ public:
 	Country* getCountryById(int id);
 	bool isComputer();
 	void Player::setArmiesInCountry(Country* c, int n);
-
+	bool isAlive();
 
 
 private:

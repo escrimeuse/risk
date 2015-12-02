@@ -15,7 +15,7 @@ private:
 		Player* player;		// a pointer to the player
 		Country* country;	// a pointer to the country used to attack
 		int numOfDice;		// the number of dice rolled by the player
-		int* dice;			// an array of dice rolls
+		int dice[3];			// an array of dice rolls
 		bool isComputer;
 	} attacker, defender;
 
@@ -59,13 +59,14 @@ public:
 	// SERVICE METHOD'
 
 	// this function is the "battle driver", and goes through all steps of the battle phase (country selection, dice rolling, battle, etc)
-	void doBattle(Map* map);
+	void doBattle(vector<Player*>& players, Map* map);
+	void victory(Player* player);
 
 };
 
 
 // this function is called from the game driver at the beginning of the battle phase, and initiates the battle
-	void attackPhase(Player* attacker, Map* map);
+	void attackPhase(vector<Player*>& players, Player* attacker, Map* map);
 
 
 

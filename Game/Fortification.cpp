@@ -25,12 +25,23 @@ void Fortification::fortify(Player* gamePlayer, Map* map) {
 			cout << "This country has no connections to your other countries!" << endl;
 		}
 		else {
+			bool isValid = false;
 			cout << "Enter the id of the country you want to move your armies to : ";
 			int finalCountryID;
 			cin >> finalCountryID;
-			bool isValid = map->checkIsAdjacent(gamePlayer->getCountryById(initialCountryID), gamePlayer->getCountryById(finalCountryID));
+			do {
+				for (int i = 0; i < possibleFortication.size(); i++) {
+					if (possibleFortication[i]->getId() == finalCountryID) {
+						isValid = true;
+						break;
+					}
+				}
+				cout << "Invalid ID try again: ";
+				cin >> finalCountryID;
+			} while (!isValid);
+			isValid = map->checkIsAdjacent(gamePlayer->getCountryById(initialCountryID), gamePlayer->getCountryById(finalCountryID));
 
-			if (isValid == true) {
+			if (isValid) {
 
 				cout << "Enter the number of armies you want to move: ";
 				int movingArmies;
@@ -50,6 +61,7 @@ void Fortification::fortify(Player* gamePlayer, Map* map) {
 				gamePlayer->setArmiesInCountry((gamePlayer->getCountryById(initialCountryID)), finalCountryArmies);
 
 				cout << "Armies moved successfully!" << endl;
+				notify();
 				cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
 				cout << "---------------------------------------------------------------------" << endl;
 				for (list<Country*>::iterator i = gamePlayer->getOwnedCountries()->begin(); i != gamePlayer->getOwnedCountries()->end(); ++i) {

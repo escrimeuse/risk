@@ -5,10 +5,11 @@
 #include"../Map/Map.h"
 #include"../Map/MapDemo.h"
 #include<iostream>
+#include "../ObserverPattern/Subject.h"
 
 class MapDemo;
 
-class Fortification {
+class Fortification : public Subject{
 
 public:
 	Fortification();

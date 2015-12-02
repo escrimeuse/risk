@@ -700,3 +700,9 @@ int Player::getTotalNumArmies() {
 	}
 	return totalArmies;
 }
+
+bool Player::isAlive() {
+	if (this->getNumOfOwnedCountries() == 0)
+		return true;
+	return false;
+}

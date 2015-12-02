@@ -487,8 +487,10 @@ int main() {
 			while (doPlayerTurns=='Y' || doPlayerTurns=='y') {
 
 				for (int i = 0; i < activePlayers.size(); i++) {
+					//reinforcement
 					(activePlayers[i])->reinforceCountries();
-					attackPhase(activePlayers[i], map);
+					//Battle
+					attackPhase(activePlayers, activePlayers[i], map);
 					// Fortification
 					Fortification fortification;
 					fortification.fortify((activePlayers[i]), map);

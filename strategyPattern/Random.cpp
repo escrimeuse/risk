@@ -21,13 +21,13 @@ bool Random::decideAttack(Player* p, Map* map){
 					c = playersCountries->front();
 				else {
 					int attackingCountry = rand() % p->getNumOfOwnedCountries();
-
+					int i = 0;
 					for (list<Country*>::iterator it = playersCountries->begin(); it != playersCountries->end(); ++it) {
-						if ((*it)->getId() == attackingCountry) {
+						if (i == attackingCountry) {
 							c = (*it);
 							break;
 						}
-
+						i++;
 					}
 				}
 			}	

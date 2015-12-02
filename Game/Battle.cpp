@@ -265,18 +265,14 @@ void Battle::decideNumDiceToRoll(bool allIn) {
 void Battle::rollDice() {
 
 	// for attacker
-	int* diceArray = new int[attacker.numOfDice];
 	for (int i = 0; i != attacker.numOfDice; i++) {
-		diceArray[i] = (rand() % 6) + 1;
+		attacker.dice[i] = (rand() % 6) + 1;
 	}
-	attacker.dice = diceArray;
 
 	// for defender
-	diceArray = new int[defender.numOfDice];
 	for (int i = 0; i != attacker.numOfDice; i++) {
-		diceArray[i] = (rand() % 6) + 1;
+		defender.dice[i] = (rand() % 6) + 1;
 	}
-	defender.dice = diceArray;
 };
 
 void Battle::sortDice() {
@@ -358,7 +354,7 @@ void Battle::compareRolls() {
 	}
 }
 
-void Battle::doBattle(Map* map) {
+void Battle::doBattle(vector<Player*>& players, Map* map) {
 
 	cout << endl;
 	cout << "*************" << endl;
@@ -517,6 +513,17 @@ void Battle::doBattle(Map* map) {
 
 				// update the defender's ownedCountry array
 				(defender.player)->removeOwnedCountry(defender.country->getName());	
+				if (defender.player->isAlive()) {
+					for (int i = 0; i < players.size(); i++) {
+						if (players[i] == defender.player) {
+							players.erase(players.begin() + i);
+							break;
+						}
+					}
+					if (players.size() == 1) {
+						victory(players.front());
+					}
+				}
 			}
 
 
@@ -553,7 +560,7 @@ void Battle::doBattle(Map* map) {
 	
 };
 
-void attackPhase(Player* player, Map* map) {
+void attackPhase(vector<Player*>& players, Player* player, Map* map) {
 
 	// First, determine if the player has any countries with 2 or more armies stationed on them.
 	// If the player does NOT have any such countries, then they cannot attack. 
@@ -577,7 +584,7 @@ void attackPhase(Player* player, Map* map) {
 
 				if (wantsToAttack == 'Y' || wantsToAttack == 'y') {
 					Battle* battle = new Battle(player);
-					battle->doBattle(map);
+					battle->doBattle(players, map);
 					delete battle;
 				}
 				else {
@@ -587,7 +594,7 @@ void attackPhase(Player* player, Map* map) {
 				cout << "Player is a Computer" << endl;
 				if(player->getStrategy()->decideAttack(player, map)){
 					Battle* battle = new Battle(player);
-					battle->doBattle(map);
+					battle->doBattle(players, map);
 					delete battle;
 				}else{
 					attack = false;
@@ -599,12 +606,10 @@ void attackPhase(Player* player, Map* map) {
 			attack = false;
 		}
 	}
-	
+}
 
-
-	
-	
-	
+void Battle::victory(Player* player) {
+	cout << "CONGRATULATIONS " << player->getName() << " YOU WON THE WAR" << endl;
 }
 
 Battle::~Battle(){
