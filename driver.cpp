@@ -453,6 +453,7 @@ int main() {
 			start.createPlayers(activePlayers, numPlayers);
 			start.initializePlayersTurn(activePlayers);
 			start.setStatistics(activePlayers);
+			start.setLogger(activePlayers);
 			start.assignCountries(activePlayers, map);
 			cout << activePlayers.size() << endl;
 

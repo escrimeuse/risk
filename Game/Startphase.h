@@ -23,6 +23,7 @@ public:
 	void initializePlayersTurn(vector<Player*>& gamePlayers);
 	void assignCountries(vector<Player*>& gamePlayers, Map* map);
 	void setStatistics(vector<Player*>& gamePlayers);
+	void setLogger(vector<Player*>& gamePlayers);
 	int roll();
 
 };

@@ -61,7 +61,7 @@ void Fortification::fortify(Player* gamePlayer, Map* map) {
 				gamePlayer->setArmiesInCountry((gamePlayer->getCountryById(initialCountryID)), finalCountryArmies);
 
 				cout << "Armies moved successfully!" << endl;
-				notify();
+				notify(FORTIFICATION_ID);
 				cout << "COUNTRY ID\tCOUNTRY NAME\tCURRENT # OF ARMIES" << endl;
 				cout << "---------------------------------------------------------------------" << endl;
 				for (list<Country*>::iterator i = gamePlayer->getOwnedCountries()->begin(); i != gamePlayer->getOwnedCountries()->end(); ++i) {

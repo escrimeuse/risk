@@ -13,6 +13,7 @@ bool Random::decideAttack(Player* p, Map* map){
     if(willAttack){
         list<Country*> *playersCountries = p->getOwnedCountries();
 		bool foundAttack = false;
+		int i = 0;
 		do {
 			srand(time(NULL));
 			Country* c = NULL;
@@ -21,7 +22,6 @@ bool Random::decideAttack(Player* p, Map* map){
 					c = playersCountries->front();
 				else {
 					int attackingCountry = rand() % p->getNumOfOwnedCountries();
-					int i = 0;
 					for (list<Country*>::iterator it = playersCountries->begin(); it != playersCountries->end(); ++it) {
 						if (i == attackingCountry) {
 							c = (*it);
@@ -29,15 +29,21 @@ bool Random::decideAttack(Player* p, Map* map){
 						}
 						i++;
 					}
+					if (i >= 60000)
+						return false;
 				}
 			}	
 			if (c->getArmies() >= 2) {
 				vector<Country*> enemies = map->getEnemyCountries(c);
 				if (enemies.size() > 0) {
 					int defendingCountry;
+					int i = 0;
 					do {
 						srand(time(NULL));
 						defendingCountry = rand() % enemies.size();
+						if (i >= 30000)
+							return false;
+						i++;
 					} while (enemies[defendingCountry]->getOwner()->getName() == c->getOwner()->getName());
 					//Set countries
 					setAttackingCountry(c);

@@ -1,4 +1,5 @@
 #include "Battle.h"
+#include "../ObserverPattern/Subject.h"
 #include <iostream>
 
 
@@ -557,7 +558,7 @@ void Battle::doBattle(vector<Player*>& players, Map* map) {
 	cout << " BATTLE ENDS " << endl;
 	cout << "*************" << endl << endl;
 
-	
+	notify(Battle::BATTLE_ID);
 };
 
 void attackPhase(vector<Player*>& players, Player* player, Map* map) {

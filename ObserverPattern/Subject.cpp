@@ -1,5 +1,6 @@
 #include "Subject.h"
 #include "Observer.h"
+#include "../Logger/Log.h"
 
 #include <iostream>
 
@@ -16,10 +17,17 @@ Subject::~Subject()
 /*
 	Notify all attached observers to update
 */
-void Subject::notify()
+void Subject::notify(int code)
 {
 	for (int i = 0; i < observers.size(); i++) {
-		observers[i]->update();
+		Log *l = dynamic_cast<Log*> (observers[i]);
+		cout << l << endl;
+		if (l == NULL) {
+			observers[i]->update();
+		}
+		else {
+			l->update(code);
+		}
 	}
 }
 

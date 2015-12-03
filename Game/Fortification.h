@@ -14,5 +14,5 @@ class Fortification : public Subject{
 public:
 	Fortification();
 	void fortify(Player* gamePlayer, Map* map);
-
+	static const int FORTIFICATION_ID = 25463;
 };

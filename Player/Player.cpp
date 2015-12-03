@@ -163,7 +163,7 @@ void Player::addOwnedCountry(Country* countryToAdd) {
 	if (!countryAlreadyOwned) {
 		ownedCountries->push_back(countryToAdd);
 		numOfOwnedCountries += 1;
-		notify();
+		notify(COUNTRY1_ID);
 	};
 
 }
@@ -201,7 +201,7 @@ void Player::removeOwnedCountry(string countryName) {
 	if (countryNode != NULL) {
 		ownedCountries->remove(countryNode);
 		numOfOwnedCountries -= 1;
-		notify();
+		notify(COUNTRY2_ID);
 	};
 
 }
@@ -241,7 +241,7 @@ void Player::addPlayerCard(Card* newCard) {
 		playersWildCards->push_back(newCard);
 		numCardsWild++;
 	}
-	notify();
+	notify(CARDS_ID);
 };
 
 void Player::removePlayerCard(Card* removeCard) {
@@ -261,7 +261,7 @@ void Player::removePlayerCard(Card* removeCard) {
 		playersWildCards->remove(removeCard);
 		numCardsWild--;
 	}
-	notify();
+	notify(CARDS_ID);
 };
 
 bool Player::validateCountryIDSelection(int id) {
@@ -638,7 +638,7 @@ void Player::reinforceCountries() {
 	for (list<Country*>::iterator i = ownedCountries->begin(); i != ownedCountries->end(); ++i) {
 		cout << (*i)->getId() << "\t\t" << (*i)->getName() << "\t\t" << (*i)->getArmies() << endl;
 	}
-
+	notify(REINFORCEMENT_ID);
 
 
 };
@@ -689,7 +689,7 @@ Country* Player::getCountryById(int id) {
 
 void Player::setArmiesInCountry(Country* c, int n) {
 	c->setArmies(n);
-	notify();
+	notify(ARMIES_ID);
 }
 
 int Player::getTotalNumArmies() {

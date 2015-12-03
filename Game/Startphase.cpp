@@ -5,6 +5,11 @@
 #include "../Statistics/ArmiesStat.h"
 #include "../Statistics/CountriesStat.h"
 #include "../Statistics/CardsStat.h"
+#include "../Logger/Log.h"
+#include "../Logger/PlayerCountryLog.h"
+#include "../Logger/PlayerCardsLog.h"
+#include "../Logger/PlayerArmiesLog.h"
+#include "../Logger/ReinforcementLog.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -42,6 +47,39 @@ void Startphase::setStatistics(vector<Player*>& gamePlayers) {
 	for (int i = 0; i < gamePlayers.size(); i++) {
 		gamePlayers[i]->attach(stat);
 		stat->attachPlayer(gamePlayers[i]);
+	}
+}
+
+
+void Startphase::setLogger(vector<Player*>& gamePlayers) {
+	//Select Desired statitics to follow
+	int option;
+	Log* log = new Log();
+	do {
+		cout << "Select desired statistics to follow: " << endl;
+		cout << "0. Log Country changes" << endl;
+		cout << "1. Log Army changes" << endl;
+		cout << "2.Log Card Changes" << endl;
+		cout << "3.Log reinforcement phase" << endl;
+		cout << "4. Done" << endl;
+		cin >> option;
+		switch (option) {
+		case 0:
+			log = new PlayerCountryLog(log);
+			break;
+		case 1:
+			log = new PlayerArmiesLog(log);	
+			break;
+		case 2:
+			log = new PlayerCardsLog(log);	
+		case 3:
+			log = new ReinforcementLog(log);
+		}
+	} while (option != 4);
+
+	for (int i = 0; i < gamePlayers.size(); i++) {
+		gamePlayers[i]->attach(log);
+		log->attachPlayer(gamePlayers[i]);
 	}
 }
 

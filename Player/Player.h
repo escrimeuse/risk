@@ -32,7 +32,7 @@ public:
 
 	void setTotalNumArmies(int newNumArmies) {
 		armies = newNumArmies;
-		notify();
+		notify(ARMIES_ID);
 	};
 
 	void setOwnedCountries(list<Country*> *countries) {
@@ -152,6 +152,11 @@ public:
 	void Player::setArmiesInCountry(Country* c, int n);
 	bool isAlive();
 
+	static const int CARDS_ID = 7638;
+	static const int ARMIES_ID = 47184;
+	static const int REINFORCEMENT_ID = 12648;
+	static const int COUNTRY1_ID = 9823;
+	static const int COUNTRY2_ID = 9993;
 
 private:
 

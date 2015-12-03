@@ -11,7 +11,7 @@ private:
 public:
 	Subject();
 	~Subject();
-	void notify();
+	void notify(int code);
 	void attach(Observer* o);
 	void detach(Observer* o);
 };

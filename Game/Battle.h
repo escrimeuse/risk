@@ -5,8 +5,9 @@
 #include "../Map\Map.h"
 #include "../StrategyPattern/Strategy.h"
 #include <stdlib.h> 
+#include "../ObserverPattern/Subject.h"
 
-class Battle {
+class Battle : public Subject {
 
 private:
 	
@@ -61,14 +62,13 @@ public:
 	// this function is the "battle driver", and goes through all steps of the battle phase (country selection, dice rolling, battle, etc)
 	void doBattle(vector<Player*>& players, Map* map);
 	void victory(Player* player);
+	static const int BATTLE_ID = 2579;
 
 };
 
 
 // this function is called from the game driver at the beginning of the battle phase, and initiates the battle
 	void attackPhase(vector<Player*>& players, Player* attacker, Map* map);
-
-
 
 
 #endif
