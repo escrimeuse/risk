@@ -1,0 +1,23 @@
+[Mapping]
+author=00000000
+warn=yes
+image=00000000
+wrap=no
+scroll=horizontal
+
+[Continents]
+c1 2 5
+c2 8
+c3 5
+c4 1
+
+[Territories]
+a 000 000 c1 b e
+e 000 000 c1 a f
+
+b 000 000 c2 a c f
+f 000 000 c2 b d e
+
+c 000 000 c3 b d
+
+d 000 000 c4 c f

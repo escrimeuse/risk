@@ -1,0 +1,86 @@
+Finally2
+
+6
+1 a Computer2 8
+5 e Caio 1
+2 b Cathryn 9
+6 f Computer1 11
+3 c Caio 4
+4 d Caio 3
+
+4
+1 c1 2 2
+1
+5
+2 c2 2 8
+2
+6
+3 c3 1 5
+3
+4 c4 1 1
+4
+
+1
+1	0	0	0	1	0	
+
+5
+0	1	1	0	0	1	
+
+2
+0	1	1	1	0	0	
+
+6
+0	0	1	1	0	0	
+
+3
+1	0	0	0	1	1	
+
+4
+0	1	0	0	1	1	
+
+PLAYERS 
+4
+Cathryn 0 0 9 0 0 0 0
+0
+1
+
+b 
+
+
+
+
+Caio 0 1 8 1 0 0 0
+0
+3
+
+e c d 
+b 
+
+
+
+Computer1 2 0 11 0 0 0 0
+0
+1
+
+f 
+
+
+
+
+Computer2 1 0 8 0 0 0 0
+0
+1
+
+a 
+
+
+
+
+ARTILLERY 6 a e b f c d 
+INFANTRY 6 a e b f c d 
+CAVALRY 6 a e b f c d 
+WILD 6 a e b f c d 
+NUMCARDSETSTRADED 0
+CURRENTPLAYER Computer1
+CURRENTPHASE 4
+GAMENAME TheGame

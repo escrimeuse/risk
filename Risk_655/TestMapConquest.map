@@ -1,0 +1,24 @@
+[MyMap2]
+author=00000000
+warn=yes
+image=00000000
+wrap=no
+scroll=horizontal
+
+[Continents]
+c1 2
+c2 8
+c3 5
+c4 1
+
+[Territories]
+a 000 000 c1 e
+e 000 000 c1 a f
+
+b 000 000 c2 f c
+f 000 000 c2 e b
+
+c 000 000 c3 b d
+
+d 000 000 c4 c
+
